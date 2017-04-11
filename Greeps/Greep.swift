@@ -12,7 +12,7 @@ import GameplayKit
 class Greep: GKEntity
 {
     let ship: Ship
-    static let defaultSpeed:Float = 25.0
+    static let defaultSpeed:Float = 25.0 //Ben smells bad
     static let wanderAmount:Float = 50.0
     var memory = Set<Information>()
     var number: UInt8 = 0
