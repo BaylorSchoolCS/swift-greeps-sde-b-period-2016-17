@@ -12,11 +12,19 @@ import GameplayKit
 class Greep: GKEntity
 {
     let ship: Ship
-    static let defaultSpeed:Float = 15.0
-    static let wanderAmount:Float = 50.0
+    static let defaultSpeed:Float = 40.0
+    static let wanderAmount:Float = 10.0
+    var state:GKStateMachine?
     var memory = Set<Information>()
     var number: UInt8 = 0
     var timer: UInt8 = 0
+    
+    var speed: Float
+    {
+        guard let mover = component(ofType: MoveComponent.self) else { return 0 }
+        return mover.speed
+    }
+    
     var sprite: SKNode?
     {
         guard let sprite = component(ofType: GKSKNodeComponent.self) else { return nil }
@@ -24,7 +32,7 @@ class Greep: GKEntity
     }
     
     var position: CGPoint
-    {
+        {
         get
         {
             guard let mover = component(ofType: MoveComponent.self) else { fatalError("move component has been created") }
@@ -43,24 +51,29 @@ class Greep: GKEntity
         self.ship = ship
         
         super.init()
-        let spriteComponent = GKSKNodeComponent(node: SKSpriteNode(imageNamed: "greep.png"))
-        spriteComponent.node.setScale(0.1)
-        spriteComponent.node.physicsBody?.categoryBitMask = PhysicsCategories.greepCategory.rawValue
-        spriteComponent.node.physicsBody?.contactTestBitMask = PhysicsCategories.waterCategory.rawValue | PhysicsCategories.tomatoCategory.rawValue | PhysicsCategories.shipCategory.rawValue
-        addComponent(spriteComponent)
+        
+        state = GKStateMachine(states: [SearchingState(greep: self), ReturningHomeState(greep: self), WaitState(greep: self), AtObstacleState(greep: self)])
         
         let shipPosition = ship.getPosition()
+        let spriteComponent = GKSKNodeComponent(node: SKSpriteNode(imageNamed: "greep_green.png"))
+        spriteComponent.node.setScale(0.05)
+        spriteComponent.node.physicsBody?.categoryBitMask = PhysicsCategories.greepCategory.rawValue
+        spriteComponent.node.physicsBody?.contactTestBitMask = PhysicsCategories.waterCategory.rawValue | PhysicsCategories.tomatoCategory.rawValue | PhysicsCategories.shipCategory.rawValue
+        spriteComponent.node.position = shipPosition
+        
+        addComponent(spriteComponent)
         
         let mover = MoveComponent(ship: ship)
         mover.delegate = spriteComponent
         mover.position = float2( x: Float(shipPosition.x), y: Float(shipPosition.y))
+        spriteComponent.node.zRotation = CGFloat(mover.rotation)
         addComponent(mover)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-        
+    
     func setRotation( newRotation: Float )
     {
         guard let mover = component(ofType: MoveComponent.self) else { return }

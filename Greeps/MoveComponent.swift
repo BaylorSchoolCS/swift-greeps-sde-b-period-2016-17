@@ -9,20 +9,26 @@
 import Foundation
 import GameplayKit
 
-class MoveComponent: GKAgent2D//, GKAgentDelegate
+class MoveComponent: GKAgent2D
 {
     let ship: Ship
+    
+    override var description: String
+    {
+        return "max: \(maxSpeed), s:\(speed), a:\(maxAcceleration), r:\(rotation), \(velocity), b\(behavior)"
+    }
     
     init( ship: Ship )
     {
         self.ship = ship
         super.init()
-        behavior = ReturnHomeGreepBehavior(ship: ship)
+        behavior = DefaultGreepBahaviour()
         speed = Greep.defaultSpeed
+        maxSpeed = Greep.defaultSpeed
         maxAcceleration = Greep.defaultSpeed
         rotation = Float(Int(arc4random() % 360)) - 180.0
         radius = 10 //?
-        mass = 0.01
+        mass = 1
     }
     
     required init?(coder aDecoder: NSCoder)

@@ -19,7 +19,7 @@ class Ship: GKEntity
     
     var agent: GKAgent2D
     {
-        return component(ofType: GKAgent2D.self)!         
+        return component(ofType: GKAgent2D.self)!
     }
     
     override init()
@@ -39,6 +39,8 @@ class Ship: GKEntity
     {
         guard let sprite = component(ofType: SpriteComponent.self) else { return }
         sprite.node.position = position
+        guard let agent2d = component(ofType: GKAgent2D.self) else { return }
+        agent2d.position = vector2(Float(position.x), Float(position.y))
     }
     
     func getPosition() -> CGPoint
@@ -47,14 +49,19 @@ class Ship: GKEntity
         return sprite.node.position
     }
     
+    func spawnGreep() -> Greep
+    {
+        return Greep(ship: self)
+    }
+    
     func spawnGreeps(count: Int = 30) -> [Greep]
     {
         var greeps = [Greep]()
         for _ in 1...count
         {
-            let greep = Greep(ship: self)
+            //            let greep = Greep(ship: self)
             
-            greeps.append(greep)
+            greeps.append(spawnGreep())
         }
         return greeps
     }

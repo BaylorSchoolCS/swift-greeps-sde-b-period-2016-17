@@ -17,24 +17,19 @@ class GameScene: SKScene {
     var ship: Ship = Ship()
     var greepsToSpawn = [Greep]()
     
+    let greepDelayInterval: TimeInterval = 0.5
     private var lastUpdateTime : TimeInterval = 0
     private var lastGreepAddTime: TimeInterval = 0
     
-    override func sceneDidLoad() {
-
-    }
+    var turnHomeTimer: TimeInterval = 10
     
     override func didMove(to view: SKView) {
         self.lastUpdateTime = 0
-        ship.setPosition(position: CGPoint(x:300,y:500))//ideally done in GVC?
-        greepsToSpawn = ship.spawnGreeps()//ideally done in GVC?
-        entities.append(ship)
-        addChild(ship.sprite!)
     }
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
-        if greepsToSpawn.count > 0 && currentTime - lastGreepAddTime > 1
+        if greepsToSpawn.count > 0 && currentTime - lastGreepAddTime > greepDelayInterval
         {
             let greep = greepsToSpawn.removeFirst()
             entities.append(greep)
@@ -49,18 +44,27 @@ class GameScene: SKScene {
         
         // Calculate time since last update
         let dt = currentTime - self.lastUpdateTime
-        
+        turnHomeTimer -= dt
         // Update entities
         for entity in self.entities {
-            if let greep = entity as? Greep
+            if turnHomeTimer <= 0
             {
-                print( "pre entity update \(greep.position)")
-                entity.update(deltaTime: dt)
-                print( "post entity update \(greep.position)")
-                // what is happening?
+                if let greep = entity as? Greep
+                {
+                    greep.state!.enter(ReturningHomeState.self)
+                }
             }
+            entity.update(deltaTime: dt)
         }
         
         self.lastUpdateTime = currentTime
+    }
+    
+    func addShipToScene( at location: CGPoint, withGreepCount numberOfGreeps:Int )
+    {
+        ship.setPosition(position: location)
+        greepsToSpawn = ship.spawnGreeps(count: numberOfGreeps)
+        entities.append(ship)
+        addChild(ship.sprite!)
     }
 }

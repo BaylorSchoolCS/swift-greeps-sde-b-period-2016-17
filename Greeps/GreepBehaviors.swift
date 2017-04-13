@@ -13,8 +13,13 @@ class DefaultGreepBahaviour: GKBehavior
 {
     override init() {
         super.init()
-        setWeight(1.0, for: GKGoal(toWander: Greep.wanderAmount))
-        setWeight(1.0, for: GKGoal(toReachTargetSpeed: Greep.defaultSpeed))
+        removeAllGoals()
+        setWeight(1.0, for: GKGoal(toWander: Greep.defaultSpeed))
+    }
+    
+    override var description: String
+    {
+        return "default"
     }
 }
 
@@ -26,4 +31,12 @@ class ReturnHomeGreepBehavior: GKBehavior
         setWeight(0.1, for: GKGoal(toWander: Greep.wanderAmount))
         setWeight(1.0, for: GKGoal(toSeekAgent: ship.agent))
     }
+    
+    override var description: String
+    {
+        return "going home"
+    }
 }
+
+// add other behaviors here
+
