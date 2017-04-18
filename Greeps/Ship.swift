@@ -11,6 +11,14 @@ import GameplayKit
 
 class Ship: GKEntity
 {
+    var greepsToSpawn: Int = 0
+    var spawnedGreeps: Int = 0
+    
+    var shouldSpawnGreep: Bool
+    {
+        return greepsToSpawn > spawnedGreeps
+    }
+    
     var sprite: SKNode?
     {
         guard let sprite = component(ofType: SpriteComponent.self) else { return nil }
@@ -51,18 +59,8 @@ class Ship: GKEntity
     
     func spawnGreep() -> Greep
     {
-        return Greep(ship: self)
-    }
-    
-    func spawnGreeps(count: Int = 30) -> [Greep]
-    {
-        var greeps = [Greep]()
-        for _ in 1...count
-        {
-            //            let greep = Greep(ship: self)
-            
-            greeps.append(spawnGreep())
-        }
-        return greeps
+        spawnedGreeps += 1
+        let greep = Greep( ship: self, number: spawnedGreeps )
+        return greep
     }
 }

@@ -15,7 +15,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var graphs = [String : GKGraph]()
     
     var ship: Ship = Ship()
-    var greepsToSpawn = [Greep]()
+    var greeps = Dictionary<String,Greep>()
     var water = SKNode()
     var tomatoPiles = [TomatoPile]()
     var obstacles = [GKPolygonObstacle]()
@@ -31,25 +31,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.lastUpdateTime = 0
         physicsWorld.contactDelegate = self
         obstacles = SKNode.obstacles(fromNodeBounds: water.children)
-        
-        for obst in obstacles
-        {
-            let path = UIBezierPath()
-            let initialPoint = obst.vertex(at: 0)
-            path.move(to: CGPoint(x: CGFloat(initialPoint.x), y: CGFloat(initialPoint.y)))
-            for i in 0..<obst.vertexCount
-            {
-                let v = obst.vertex(at: i)
-                path.addLine(to: CGPoint(x: CGFloat(v.x), y: CGFloat(v.y)))
-                print( v )
-            }
-            path.close()
-//            path.addLine(to: CGPoint(x: CGFloat(initialPoint.x), y: CGFloat(initialPoint.y)))
-            let shape = SKShapeNode(path: path.cgPath)
-            shape.strokeColor = UIColor.red
-            addChild(shape)
-        }
-        
+//        obstacles = SKNode.obstacles(fromNodePhysicsBodies: water.children)
+        print( "obsts: \(obstacles)")
+
         self.scaleMode = .aspectFit
         self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
         self.physicsBody?.categoryBitMask = PhysicsCategory.boundary.rawValue
@@ -57,9 +41,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
-        if greepsToSpawn.count > 0 && currentTime - lastGreepAddTime > greepDelayInterval
+        if ship.shouldSpawnGreep && currentTime - lastGreepAddTime > greepDelayInterval
         {
-            let greep = greepsToSpawn.removeFirst()
+            let greep = ship.spawnGreep()
+            greeps[greep.name] = greep
             entities.append(greep)
             addChild(greep.sprite!)
             lastGreepAddTime = currentTime
@@ -103,7 +88,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func addShip( at location: CGPoint, withGreepCount numberOfGreeps:Int )
     {
         ship.setPosition(position: location)
-        greepsToSpawn = ship.spawnGreeps(count: numberOfGreeps)
+        ship.greepsToSpawn = numberOfGreeps
         entities.append(ship)
         addChild(ship.sprite!)
     }
@@ -131,19 +116,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
-        switch contact.bodyA.categoryBitMask
+        if contact.bodyB.categoryBitMask == PhysicsCategory.greep.rawValue
         {
-            case PhysicsCategory.boundary.rawValue:
-                print ("at edge")
-            case PhysicsCategory.water.rawValue:
-                print ("at water")
-            case PhysicsCategory.ship.rawValue:
-                print( "at ship")
-            case PhysicsCategory.tomato.rawValue:
-                print( "found tomato")
-            default:
-                print( "no contact")
+            print( greeps[contact.bodyB.node!.name!]! )
         }
+//
+//        switch contact.bodyA.categoryBitMask
+//        {
+//            case PhysicsCategory.boundary.rawValue:
+//                print ("at edge")
+//            case PhysicsCategory.water.rawValue:
+//                print ("at water")
+//            case PhysicsCategory.ship.rawValue:
+//                print( "at ship")
+//            case PhysicsCategory.tomato.rawValue:
+//                print( "found tomato")
+//            default:
+//                print( "no contact")
+//        }
         
     }
 }

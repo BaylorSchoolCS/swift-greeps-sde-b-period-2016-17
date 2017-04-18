@@ -46,7 +46,14 @@ class Greep: GKEntity
         }
     }
     
-    init( ship: Ship )
+    var name: String
+    {
+        guard let sprite = component(ofType: GKSKNodeComponent.self) else { return "no name" }
+        
+        return sprite.node.name!
+    }
+    
+    init( ship: Ship, number: Int )
     {
         self.ship = ship
         
@@ -68,6 +75,7 @@ class Greep: GKEntity
 
         spriteComponent.node.physicsBody = physics
         spriteComponent.node.position = shipPosition
+        physics.node!.name = "greep\(number)"
         
         addComponent(spriteComponent)
         
