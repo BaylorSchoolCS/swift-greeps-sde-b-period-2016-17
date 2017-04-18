@@ -57,8 +57,16 @@ class Greep: GKEntity
         let shipPosition = ship.getPosition()
         let spriteComponent = GKSKNodeComponent(node: SKSpriteNode(imageNamed: "greep_green.png"))
         spriteComponent.node.setScale(0.05)
-        spriteComponent.node.physicsBody?.categoryBitMask = PhysicsCategories.greepCategory.rawValue
-        spriteComponent.node.physicsBody?.contactTestBitMask = PhysicsCategories.waterCategory.rawValue | PhysicsCategories.tomatoCategory.rawValue | PhysicsCategories.shipCategory.rawValue
+        let sprite = spriteComponent.node as! SKSpriteNode
+        
+        let physics = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
+        
+        physics.categoryBitMask = PhysicsCategory.greep.rawValue
+        physics.collisionBitMask = PhysicsCategory.water.rawValue
+        physics.contactTestBitMask =  PhysicsCategory.tomato.rawValue | PhysicsCategory.ship.rawValue
+        physics.affectedByGravity = false
+
+        spriteComponent.node.physicsBody = physics
         spriteComponent.node.position = shipPosition
         
         addComponent(spriteComponent)

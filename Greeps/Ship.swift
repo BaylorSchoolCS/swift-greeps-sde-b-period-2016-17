@@ -26,7 +26,7 @@ class Ship: GKEntity
     {
         super.init()
         let sprite = SpriteComponent(texture: SKTexture(imageNamed: "ship.png"))
-        sprite.node.physicsBody?.categoryBitMask = PhysicsCategories.shipCategory.rawValue
+        sprite.node.physicsBody?.categoryBitMask = PhysicsCategory.ship.rawValue
         addComponent(sprite)
         addComponent( GKAgent2D() )
     }

@@ -15,7 +15,7 @@ class MoveComponent: GKAgent2D
     
     override var description: String
     {
-        return "max: \(maxSpeed), s:\(speed), a:\(maxAcceleration), r:\(rotation), \(velocity), b\(behavior)"
+        return "max: \(maxSpeed), s:\(speed), a:\(maxAcceleration), r:\(rotation), \(velocity), b\(behavior!)"
     }
     
     init( ship: Ship )

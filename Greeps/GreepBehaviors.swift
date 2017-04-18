@@ -13,7 +13,6 @@ class DefaultGreepBahaviour: GKBehavior
 {
     override init() {
         super.init()
-        removeAllGoals()
         setWeight(1.0, for: GKGoal(toWander: Greep.defaultSpeed))
     }
     
@@ -40,3 +39,12 @@ class ReturnHomeGreepBehavior: GKBehavior
 
 // add other behaviors here
 
+class GoToPileAndAvoidBehavior: GKBehavior
+{
+    init(tomatoPile: GKAgent, obstacles: [GKObstacle])
+    {
+        super.init()
+        setWeight(1.0, for: GKGoal(toSeekAgent: tomatoPile))
+        setWeight(10.0, for: GKGoal(toAvoid: obstacles, maxPredictionTime: 20))
+    }
+}

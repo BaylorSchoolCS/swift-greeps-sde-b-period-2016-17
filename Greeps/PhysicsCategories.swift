@@ -8,10 +8,10 @@
 
 import Foundation
 
-enum PhysicsCategories: UInt32
+enum PhysicsCategory: UInt32
 {
-    case waterCategory = 0
-    case greepCategory = 1
-    case tomatoCategory = 2
-    case shipCategory = 3
+    case greep = 1
+    case water = 2
+    case tomato = 4
+    case ship = 8
 }

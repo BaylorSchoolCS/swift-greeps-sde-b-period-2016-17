@@ -7,3 +7,12 @@
 //
 
 import Foundation
+import GameplayKit
+
+struct Water
+{
+    var sprite:SKNode
+    var obstacle:GKPolygonObstacle {
+        return SKNode.obstacles(fromSpriteTextures: [sprite], accuracy: 0.5).first!
+    }
+}
