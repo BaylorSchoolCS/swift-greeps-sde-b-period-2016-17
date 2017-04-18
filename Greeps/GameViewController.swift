@@ -29,7 +29,7 @@ class GameViewController: UIViewController {
                 sceneNode.scaleMode = .aspectFill
                 // all of this comes from a json file representing the levels?
                 sceneNode.addChild(sceneNode.water)
-                sceneNode.addShip(at: CGPoint(x:300,y:500), withGreepCount: 30)
+                sceneNode.addShip(at: CGPoint(x:300,y:500), withGreepCount: 5)
                 sceneNode.addWater( ofType: "water1", at: CGPoint(x:800,y:200), scaledBy:0.2, rotatedBy: 50)
                 sceneNode.addTomatoPile(at: CGPoint( x:900, y:100), ofSize: 10 )
                 // Present the scene

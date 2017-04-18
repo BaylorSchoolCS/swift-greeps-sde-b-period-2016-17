@@ -9,7 +9,7 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var entities = [GKEntity]()
     var graphs = [String : GKGraph]()
@@ -29,7 +29,30 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         self.lastUpdateTime = 0
+        physicsWorld.contactDelegate = self
         obstacles = SKNode.obstacles(fromNodeBounds: water.children)
+        
+        for obst in obstacles
+        {
+            let path = UIBezierPath()
+            let initialPoint = obst.vertex(at: 0)
+            path.move(to: CGPoint(x: CGFloat(initialPoint.x), y: CGFloat(initialPoint.y)))
+            for i in 0..<obst.vertexCount
+            {
+                let v = obst.vertex(at: i)
+                path.addLine(to: CGPoint(x: CGFloat(v.x), y: CGFloat(v.y)))
+                print( v )
+            }
+            path.close()
+//            path.addLine(to: CGPoint(x: CGFloat(initialPoint.x), y: CGFloat(initialPoint.y)))
+            let shape = SKShapeNode(path: path.cgPath)
+            shape.strokeColor = UIColor.red
+            addChild(shape)
+        }
+        
+        self.scaleMode = .aspectFit
+        self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
+        self.physicsBody?.categoryBitMask = PhysicsCategory.boundary.rawValue
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -105,5 +128,22 @@ class GameScene: SKScene {
         let pile = TomatoPile(location: location, count: count)
         tomatoPiles.append(pile)
         addChild(pile.node)
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        switch contact.bodyA.categoryBitMask
+        {
+            case PhysicsCategory.boundary.rawValue:
+                print ("at edge")
+            case PhysicsCategory.water.rawValue:
+                print ("at water")
+            case PhysicsCategory.ship.rawValue:
+                print( "at ship")
+            case PhysicsCategory.tomato.rawValue:
+                print( "found tomato")
+            default:
+                print( "no contact")
+        }
+        
     }
 }

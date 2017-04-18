@@ -45,6 +45,6 @@ class GoToPileAndAvoidBehavior: GKBehavior
     {
         super.init()
         setWeight(1.0, for: GKGoal(toSeekAgent: tomatoPile))
-        setWeight(10.0, for: GKGoal(toAvoid: obstacles, maxPredictionTime: 20))
+        setWeight(10.0, for: GKGoal(toAvoid: obstacles, maxPredictionTime: 5))
     }
 }

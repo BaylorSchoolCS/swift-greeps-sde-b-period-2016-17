@@ -62,8 +62,8 @@ class Greep: GKEntity
         let physics = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
         
         physics.categoryBitMask = PhysicsCategory.greep.rawValue
-        physics.collisionBitMask = PhysicsCategory.water.rawValue
-        physics.contactTestBitMask =  PhysicsCategory.tomato.rawValue | PhysicsCategory.ship.rawValue
+        physics.collisionBitMask = PhysicsCategory.water.rawValue | PhysicsCategory.boundary.rawValue
+        physics.contactTestBitMask =  (PhysicsCategory.tomato.rawValue | PhysicsCategory.water.rawValue) | (PhysicsCategory.ship.rawValue | PhysicsCategory.boundary.rawValue)
         physics.affectedByGravity = false
 
         spriteComponent.node.physicsBody = physics

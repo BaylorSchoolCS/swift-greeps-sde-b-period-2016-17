@@ -14,4 +14,5 @@ enum PhysicsCategory: UInt32
     case water = 2
     case tomato = 4
     case ship = 8
+    case boundary = 16
 }
