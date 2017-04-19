@@ -37,6 +37,15 @@ class ReturnHomeGreepBehavior: GKBehavior
     }
 }
 
+class GatheringInformationBehavior: GKBehavior
+{
+    override init()
+    {
+        super.init()
+        setWeight(1.0, for: GKGoal(toReachTargetSpeed: 0))
+    }
+}
+
 // add other behaviors here
 
 class GoToPileAndAvoidBehavior: GKBehavior

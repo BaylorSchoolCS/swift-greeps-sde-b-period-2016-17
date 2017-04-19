@@ -11,6 +11,12 @@ import GameplayKit
 
 extension Greep
 {
+    enum State
+    {
+        case Searching, ReturningHome, Waiting, AvoidingObstacle, GatheringInformation
+        //add in up to four more states
+    }
+    
     func contactedEdge()
     {
         // do the edge avoiding behavior for 50 counts
@@ -18,7 +24,10 @@ extension Greep
     
     func contactedWater(_ water: GKPolygonObstacle)
     {
+        // add obstacle to memory
+        let information = gatherInformationAbout(obstacle: water)
         
+        // change state and behavior to wait
     }
     
     func contactedShip()
@@ -31,12 +40,26 @@ extension Greep
         
     }
     
-    
     override func update(deltaTime seconds: TimeInterval) {
         super.update(deltaTime: seconds)
-//        if state = avoid and timer <= 0
-//        {
-//            change behavior
-//        }
+        switch state
+        {
+            case .Searching:
+                if timer <= 0
+                {
+                    // do whatever
+                }
+                break
+            case .ReturningHome:
+                break
+            case .Waiting:
+                break
+            case .AvoidingObstacle:
+                break
+            case .GatheringInformation:
+                break
+                // user-defined cases:
+            
+        }
     }
 }
