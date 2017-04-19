@@ -21,8 +21,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var obstacles = Dictionary<SKNode,GKPolygonObstacle>()
     
     let greepDelayInterval: TimeInterval = 0.5
-    private var lastUpdateTime : TimeInterval = 0
-    private var lastGreepAddTime: TimeInterval = 0
     
     var foundTomatoTimer: TimeInterval = 10
     var turnHomeTimer: TimeInterval = 90
@@ -60,28 +58,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // Calculate time since last update
         let dt = currentTime - self.lastUpdateTime
-//        turnHomeTimer -= dt
-//        foundTomatoTimer -= dt
-        // Update entities
 
         for entity in self.entities {
-//            if turnHomeTimer <= 0
-//            {
-//                if let greep = entity as? Greep
-//                {
-//                    greep.updateBehaviorTo(ReturnHomeGreepBehavior(ship: ship))
-//                }
-//            }
-//            
-//            if foundTomatoTimer <= 0
-//            {
-//                if let greep = entity as? Greep
-//                {
-//                    let pile = tomatoPiles.first!
-//                    let obs = Array(obstacles.values)
-//                    greep.updateBehaviorTo(GoToPileAndAvoidBehavior(tomatoPile: pile.agent, obstacles: obs))
-//                }
-//            }
+
             
             entity.update(deltaTime: dt)
         }
@@ -167,41 +146,4 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
     }
-    /*
-    func didEnd(_ contact: SKPhysicsContact) {
-        if contact.bodyA.categoryBitMask == PhysicsCategory.greep.rawValue
-        {
-            let greep = greeps[contact.bodyA.node!.name!]!
-            switch contact.bodyB.categoryBitMask
-            {
-            case PhysicsCategory.boundary.rawValue:
-                greep.atEdge = false
-            case PhysicsCategory.water.rawValue:
-                greep.atWater = false
-            case PhysicsCategory.ship.rawValue:
-                greep.atShip = false
-            case PhysicsCategory.tomato.rawValue:
-                greep.atTomato = false
-            default:
-                return
-            }
-        }
-        else if contact.bodyB.categoryBitMask == PhysicsCategory.greep.rawValue
-        {
-            let greep = greeps[contact.bodyB.node!.name!]!
-            switch contact.bodyA.categoryBitMask
-            {
-            case PhysicsCategory.boundary.rawValue:
-                greep.atEdge = false
-            case PhysicsCategory.water.rawValue:
-                greep.atWater = false
-            case PhysicsCategory.ship.rawValue:
-                greep.atShip = false
-            case PhysicsCategory.tomato.rawValue:
-                greep.atTomato = false
-            default:
-                return
-            }
-        }
-    }*/
 }
