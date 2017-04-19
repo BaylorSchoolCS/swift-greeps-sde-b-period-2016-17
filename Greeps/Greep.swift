@@ -14,6 +14,20 @@ class Greep: GKEntity
     let ship: Ship
     static let defaultSpeed:Float = 40.0
     static let wanderAmount:Float = 10.0
+    var informationTimer: TimeInterval = 0
+    var state: State {
+        get
+        {
+            return self.state
+        }
+        set
+        {
+            if informationTimer <= 0
+            {
+                self.state = newValue
+            }
+        }
+    }
     var memory1: Information?
     var memory2: Information?
     var memory3: Information?
@@ -22,8 +36,14 @@ class Greep: GKEntity
     
     var speed: Float
     {
-        guard let mover = component(ofType: MoveComponent.self) else { return 0 }
-        return mover.speed
+        get {
+            guard let mover = component(ofType: MoveComponent.self) else { return 0 }
+            return mover.speed
+        }
+        set(newSpeed) {
+            guard let mover = component(ofType: MoveComponent.self) else { return }
+            mover.speed = newSpeed
+        }
     }
     
     var sprite: SKNode?
@@ -59,7 +79,7 @@ class Greep: GKEntity
         self.ship = ship
         
         super.init()
-        
+        self.state = .Searching
         let shipPosition = ship.getPosition()
         let spriteComponent = GKSKNodeComponent(node: SKSpriteNode(imageNamed: "greep_green.png"))
         spriteComponent.node.setScale(0.05)
@@ -101,9 +121,13 @@ class Greep: GKEntity
         mover.rotation += delta
     }
     
-    func gatherInformationAbout( obstacle: GKObstacle )
+    func gatherInformationAbout( obstacle: GKObstacle ) -> Information
     {
-        
+        speed = 0
+        updateBehaviorTo(GatheringInformationBehavior())
+        informationTimer = 5 // fixed for now, would like it based on area of obstacle
+        state = .GatheringInformation
+        return Information(info: obstacle)!
     }
     
     func shareInformation(otherMemory: Set<Information>)
