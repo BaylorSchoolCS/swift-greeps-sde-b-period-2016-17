@@ -11,9 +11,16 @@ import GameplayKit
 
 class Greep: GKEntity
 {
+    enum State
+    {
+        case Searching, ReturningHome, Waiting, AvoidingObstacle
+        //add in up to four more states
+    }
+    
     let ship: Ship
     static let defaultSpeed:Float = 40.0
     static let wanderAmount:Float = 10.0
+    var state: State = .Searching
     var memory1: Information?
     var memory2: Information?
     var memory3: Information?
