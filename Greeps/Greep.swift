@@ -14,8 +14,9 @@ class Greep: GKEntity
     let ship: Ship
     static let defaultSpeed:Float = 40.0
     static let wanderAmount:Float = 10.0
-    var state:GKStateMachine?
-    var memory = Set<Information>()
+    var memory1: Information?
+    var memory2: Information?
+    var memory3: Information?
     var number: UInt8 = 0
     var timer: UInt8 = 0
     
@@ -32,7 +33,7 @@ class Greep: GKEntity
     }
     
     var position: CGPoint
-        {
+    {
         get
         {
             guard let mover = component(ofType: MoveComponent.self) else { fatalError("move component has been created") }
@@ -58,8 +59,6 @@ class Greep: GKEntity
         self.ship = ship
         
         super.init()
-        
-        state = GKStateMachine(states: [SearchingState(greep: self), ReturningHomeState(greep: self), WaitState(greep: self), AtObstacleState(greep: self)])
         
         let shipPosition = ship.getPosition()
         let spriteComponent = GKSKNodeComponent(node: SKSpriteNode(imageNamed: "greep_green.png"))
@@ -110,5 +109,11 @@ class Greep: GKEntity
     func shareInformation(otherMemory: Set<Information>)
     {
         
+    }
+    
+    func updateBehaviorTo( _ newBehaviour: GKBehavior )
+    {
+        guard let mover = component(ofType: MoveComponent.self) else { return }
+        mover.behavior = newBehaviour
     }
 }

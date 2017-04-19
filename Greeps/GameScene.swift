@@ -18,7 +18,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var greeps = Dictionary<String,Greep>()
     var water = SKNode()
     var tomatoPiles = [TomatoPile]()
-    var obstacles = [GKPolygonObstacle]()
+    var obstacles = Dictionary<SKNode,GKPolygonObstacle>()
     
     let greepDelayInterval: TimeInterval = 0.5
     private var lastUpdateTime : TimeInterval = 0
@@ -30,9 +30,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func didMove(to view: SKView) {
         self.lastUpdateTime = 0
         physicsWorld.contactDelegate = self
-        obstacles = SKNode.obstacles(fromNodeBounds: water.children)
-//        obstacles = SKNode.obstacles(fromNodePhysicsBodies: water.children)
-        print( "obsts: \(obstacles)")
+        for w in water.children
+        {
+            let ob = SKNode.obstacles(fromNodeBounds: [w])
+            obstacles[w] = ob.first!
+        }
+        
 
         self.scaleMode = .aspectFit
         self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
@@ -75,7 +78,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if let greep = entity as? Greep
                 {
                     let pile = tomatoPiles.first!
-                    greep.updateBehaviorTo(GoToPileAndAvoidBehavior(tomatoPile: pile.agent, obstacles: obstacles))
+                    let obs = Array(obstacles.values)
+                    greep.updateBehaviorTo(GoToPileAndAvoidBehavior(tomatoPile: pile.agent, obstacles: obs))
                 }
             }
             
@@ -116,24 +120,88 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
-        if contact.bodyB.categoryBitMask == PhysicsCategory.greep.rawValue
+        if contact.bodyA.categoryBitMask == PhysicsCategory.greep.rawValue
         {
-            print( greeps[contact.bodyB.node!.name!]! )
+            let greep = greeps[contact.bodyA.node!.name!]!
+            switch contact.bodyB.categoryBitMask
+            {
+                case PhysicsCategory.boundary.rawValue:
+                    greep.contactedEdge()
+                case PhysicsCategory.water.rawValue:
+                    for w in water.children
+                    {
+                        if w.contains(contact.contactPoint)
+                        {
+                            greep.contactedWater(obstacles[w]!)
+                        }
+                    }
+                case PhysicsCategory.ship.rawValue:
+                    greep.contactedShip()
+                case PhysicsCategory.tomato.rawValue:
+                    greep.contactedTomato()
+                default:
+                    return
+            }
         }
-//
-//        switch contact.bodyA.categoryBitMask
-//        {
-//            case PhysicsCategory.boundary.rawValue:
-//                print ("at edge")
-//            case PhysicsCategory.water.rawValue:
-//                print ("at water")
-//            case PhysicsCategory.ship.rawValue:
-//                print( "at ship")
-//            case PhysicsCategory.tomato.rawValue:
-//                print( "found tomato")
-//            default:
-//                print( "no contact")
-//        }
-        
+        else if contact.bodyB.categoryBitMask == PhysicsCategory.greep.rawValue
+        {
+            let greep = greeps[contact.bodyB.node!.name!]!
+            switch contact.bodyA.categoryBitMask
+            {
+                case PhysicsCategory.boundary.rawValue:
+                    greep.contactedEdge()
+                case PhysicsCategory.water.rawValue:
+                    for w in water.children
+                    {
+                        if w.contains(contact.contactPoint)
+                        {
+                            greep.contactedWater(obstacles[w]!)
+                        }
+                    }
+                case PhysicsCategory.ship.rawValue:
+                    greep.contactedShip()
+                case PhysicsCategory.tomato.rawValue:
+                    greep.contactedTomato()
+                default:
+                    return
+            }
+        }
     }
+    /*
+    func didEnd(_ contact: SKPhysicsContact) {
+        if contact.bodyA.categoryBitMask == PhysicsCategory.greep.rawValue
+        {
+            let greep = greeps[contact.bodyA.node!.name!]!
+            switch contact.bodyB.categoryBitMask
+            {
+            case PhysicsCategory.boundary.rawValue:
+                greep.atEdge = false
+            case PhysicsCategory.water.rawValue:
+                greep.atWater = false
+            case PhysicsCategory.ship.rawValue:
+                greep.atShip = false
+            case PhysicsCategory.tomato.rawValue:
+                greep.atTomato = false
+            default:
+                return
+            }
+        }
+        else if contact.bodyB.categoryBitMask == PhysicsCategory.greep.rawValue
+        {
+            let greep = greeps[contact.bodyB.node!.name!]!
+            switch contact.bodyA.categoryBitMask
+            {
+            case PhysicsCategory.boundary.rawValue:
+                greep.atEdge = false
+            case PhysicsCategory.water.rawValue:
+                greep.atWater = false
+            case PhysicsCategory.ship.rawValue:
+                greep.atShip = false
+            case PhysicsCategory.tomato.rawValue:
+                greep.atTomato = false
+            default:
+                return
+            }
+        }
+    }*/
 }

@@ -18,7 +18,7 @@
 		5D7B031C1E8E9CEE00959AAE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5D7B031A1E8E9CEE00959AAE /* LaunchScreen.storyboard */; };
 		5D7B032A1E8EA66800959AAE /* Water.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D7B03291E8EA66800959AAE /* Water.swift */; };
 		5D7B032E1E8EA97000959AAE /* SpriteComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D7B032D1E8EA97000959AAE /* SpriteComponent.swift */; };
-		5D9C65021E9FFBF100AB1C1E /* GreepStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9C65011E9FFBF100AB1C1E /* GreepStates.swift */; };
+		5D9C65041EA68D8A00AB1C1E /* Greep+StudentChanges.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9C65031EA68D8A00AB1C1E /* Greep+StudentChanges.swift */; };
 		5D9E76281E9289E2003F633D /* Greep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9E76271E9289E2003F633D /* Greep.swift */; };
 		5D9E762A1E928A44003F633D /* Information.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9E76291E928A44003F633D /* Information.swift */; };
 		5D9E762C1E928ACC003F633D /* MoveComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9E762B1E928ACC003F633D /* MoveComponent.swift */; };
@@ -41,7 +41,7 @@
 		5D7B031D1E8E9CEE00959AAE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5D7B03291E8EA66800959AAE /* Water.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Water.swift; sourceTree = "<group>"; };
 		5D7B032D1E8EA97000959AAE /* SpriteComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpriteComponent.swift; sourceTree = "<group>"; };
-		5D9C65011E9FFBF100AB1C1E /* GreepStates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GreepStates.swift; sourceTree = "<group>"; };
+		5D9C65031EA68D8A00AB1C1E /* Greep+StudentChanges.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Greep+StudentChanges.swift"; sourceTree = "<group>"; };
 		5D9E76271E9289E2003F633D /* Greep.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Greep.swift; sourceTree = "<group>"; };
 		5D9E76291E928A44003F633D /* Information.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Information.swift; sourceTree = "<group>"; };
 		5D9E762B1E928ACC003F633D /* MoveComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoveComponent.swift; sourceTree = "<group>"; };
@@ -88,9 +88,9 @@
 				5D9E762D1E928B01003F633D /* Ship.swift */,
 				5D9E762B1E928ACC003F633D /* MoveComponent.swift */,
 				5D9E762F1E92B40F003F633D /* GreepBehaviors.swift */,
-				5D9C65011E9FFBF100AB1C1E /* GreepStates.swift */,
 				5D9E76291E928A44003F633D /* Information.swift */,
 				5D9E76271E9289E2003F633D /* Greep.swift */,
+				5D9C65031EA68D8A00AB1C1E /* Greep+StudentChanges.swift */,
 				5D7B030B1E8E9CEE00959AAE /* AppDelegate.swift */,
 				5D7B030D1E8E9CEE00959AAE /* GameScene.sks */,
 				5D7B032D1E8EA97000959AAE /* SpriteComponent.swift */,
@@ -139,7 +139,7 @@
 				TargetAttributes = {
 					5D7B03071E8E9CEE00959AAE = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 73DEC7UJG5;
+						DevelopmentTeam = 7593358DTF;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -188,12 +188,12 @@
 				50BD058C1EA0351300EF774A /* TomatoPile.swift in Sources */,
 				5D7B032A1E8EA66800959AAE /* Water.swift in Sources */,
 				5D9E76301E92B40F003F633D /* GreepBehaviors.swift in Sources */,
-				5D9C65021E9FFBF100AB1C1E /* GreepStates.swift in Sources */,
 				5DCC12541E8EB74C0089ABD4 /* PhysicsCategories.swift in Sources */,
 				5D9E762E1E928B01003F633D /* Ship.swift in Sources */,
 				5D7B03141E8E9CEE00959AAE /* GameViewController.swift in Sources */,
 				5D7B030C1E8E9CEE00959AAE /* AppDelegate.swift in Sources */,
 				5D9E762C1E928ACC003F633D /* MoveComponent.swift in Sources */,
+				5D9C65041EA68D8A00AB1C1E /* Greep+StudentChanges.swift in Sources */,
 				5D7B032E1E8EA97000959AAE /* SpriteComponent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -317,7 +317,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 73DEC7UJG5;
+				DEVELOPMENT_TEAM = 7593358DTF;
 				INFOPLIST_FILE = Greeps/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -331,7 +331,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 73DEC7UJG5;
+				DEVELOPMENT_TEAM = 7593358DTF;
 				INFOPLIST_FILE = Greeps/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
