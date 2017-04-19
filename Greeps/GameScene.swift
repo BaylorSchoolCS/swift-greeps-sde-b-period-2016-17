@@ -60,28 +60,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // Calculate time since last update
         let dt = currentTime - self.lastUpdateTime
-        turnHomeTimer -= dt
-        foundTomatoTimer -= dt
+//        turnHomeTimer -= dt
+//        foundTomatoTimer -= dt
         // Update entities
 
         for entity in self.entities {
-            if turnHomeTimer <= 0
-            {
-                if let greep = entity as? Greep
-                {
-                    greep.updateBehaviorTo(ReturnHomeGreepBehavior(ship: ship))
-                }
-            }
-            
-            if foundTomatoTimer <= 0
-            {
-                if let greep = entity as? Greep
-                {
-                    let pile = tomatoPiles.first!
-                    let obs = Array(obstacles.values)
-                    greep.updateBehaviorTo(GoToPileAndAvoidBehavior(tomatoPile: pile.agent, obstacles: obs))
-                }
-            }
+//            if turnHomeTimer <= 0
+//            {
+//                if let greep = entity as? Greep
+//                {
+//                    greep.updateBehaviorTo(ReturnHomeGreepBehavior(ship: ship))
+//                }
+//            }
+//            
+//            if foundTomatoTimer <= 0
+//            {
+//                if let greep = entity as? Greep
+//                {
+//                    let pile = tomatoPiles.first!
+//                    let obs = Array(obstacles.values)
+//                    greep.updateBehaviorTo(GoToPileAndAvoidBehavior(tomatoPile: pile.agent, obstacles: obs))
+//                }
+//            }
             
             entity.update(deltaTime: dt)
         }
