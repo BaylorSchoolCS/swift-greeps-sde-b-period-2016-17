@@ -83,7 +83,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.fontSize = 50
         scoreLabel.fontColor = SKColor.white
         scoreLabel.text = "\(count)"
-        print(size.height)
+        print(size.height )
         scoreLabel.position = CGPoint(x:frame.size.width / 20, y:frame.size.height - frame.size.height / 14)
         self.addChild(scoreLabel)
     }
