@@ -58,3 +58,13 @@ class GoToPileAndAvoidBehavior: GKBehavior
         setWeight(10.0, for: GKGoal(toAvoid: obstacles, maxPredictionTime: 20))
     }
 }
+
+class GoAroundWaterBehavior: GKBehavior
+{
+    init(water: GKAgent)
+    {
+        super.init()
+        setWeight(1.0, for: GKGoal(toWander: Greep.wanderAmount))
+        setWeight(10.0, for: GKGoal(toSeparateFrom: [water], maxDistance: 20, maxAngle: 0))
+    }
+}

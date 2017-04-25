@@ -15,13 +15,13 @@ class Greep: GKEntity
     static let defaultSpeed:Float = 40.0
     static let wanderAmount:Float = 10.0
     var informationTimer: TimeInterval? = nil
+    var timer: TimeInterval? = nil
     var state: State = .Searching
     var nextState: State?
     var nextBehavior: GKBehavior?
     var pendingMemory: Information? // not allowed to use this variable
     var memory = Memory()
     var number: UInt8 = 0
-    var timer: UInt8 = 0
     
     var speed: Float
     {
@@ -140,27 +140,14 @@ class Greep: GKEntity
             if informationTimer! <= 0
             {
                 didFinishGatheringInformation()
-                informationTimer = nil
             }
         }
     }
     
     func didFinishGatheringInformation()
     {
-        if nextState == nil
-        {
-            state = .Searching
-            updateBehaviorTo(DefaultGreepBahaviour())
-        }
-        else
-        {
-            state = nextState!
-            nextState = nil
-            print( "Doing: \(nextBehavior!)")
-            updateBehaviorTo(nextBehavior!) // probably should check...
-            nextBehavior = nil
-            
-        }
+        timerElapsed()
+        informationTimer = nil
         speed = Greep.defaultSpeed
         memory.add(information: pendingMemory! )
     }
@@ -176,6 +163,27 @@ class Greep: GKEntity
         mover.behavior = newBehaviour
     }
     
+    func timerElapsed()
+    {
+        if nextState == nil
+        {
+            state = .Searching
+            updateBehaviorTo(DefaultGreepBahaviour())
+        }
+        else
+        {
+            state = nextState!
+            nextState = nil
+            if nextBehavior == nil
+            {
+                nextBehavior = DefaultGreepBahaviour()
+            }
+            print( "Doing: \(nextBehavior!)")
+            updateBehaviorTo(nextBehavior!)
+            nextBehavior = nil
+        }
+    }
+    
     func updateTimers(deltaTime seconds: TimeInterval)
     {
         if informationTimer != nil
@@ -187,6 +195,19 @@ class Greep: GKEntity
             else
             {
                 didFinishGatheringInformation()
+            }
+        }
+        
+        if timer != nil
+        {
+            if timer! > 0
+            {
+                timer! -= seconds
+            }
+            else
+            {
+                timerElapsed()
+                timer = nil
             }
         }
     }

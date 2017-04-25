@@ -19,16 +19,22 @@ extension Greep
     
     func contactedEdge()
     {
-        // do the edge avoiding behavior for 50 counts
+        updateBehaviorTo(ReturnHomeGreepBehavior(ship: ship))
+        timer = 2
+        state = .AvoidingObstacle
+        nextState = .Searching
+        nextBehavior = DefaultGreepBahaviour()
     }
     
     func contactedWater(_ water: GKPolygonObstacle)
     {
-        // add obstacle to memory
+//         add obstacle to memory
         if !memory.contains( information: Information(info: water)!) && (memory.infoInSlot(0) == nil || memory.infoInSlot(1) == nil)
         {
             gatherInformationAbout(obstacle: water, postState: .ReturningHome, postBehavior: ReturnHomeGreepBehavior(ship: ship) )
         }
+        
+        
     }
     
     func contactedShip()
@@ -47,10 +53,6 @@ extension Greep
         switch state
         {
             case .Searching:
-                if timer <= 0
-                {
-                    // do whatever
-                }
                 break
             case .ReturningHome:
                 break
