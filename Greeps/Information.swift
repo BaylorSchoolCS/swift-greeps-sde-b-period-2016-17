@@ -47,6 +47,7 @@ class Information: Hashable
         }
     }
 }
+
 extension Information: Equatable
 {
     static func ==(lhs: Information, rhs: Information) -> Bool
@@ -66,5 +67,54 @@ extension Information: Equatable
         {
             return false
         }
+    }
+}
+
+struct Memory
+{
+    private var slots:[Information?] = [nil,nil,nil]
+    
+    func contains( information info: Information ) -> Bool
+    {
+        return slots.contains(where: {$0 == info})
+    }
+    
+    mutating func add( information info: Information, toSlot index: Int )
+    {
+        guard !contains( information: info ) else { return }
+        
+        slots[index] = info
+    }
+    
+    mutating func add( information info: Information )
+    {
+        guard !contains( information: info ) else { return }
+        
+        for i in 0..<slots.count
+        {
+            if slots[i] == nil
+            {
+                slots[i] = info
+                return
+            }
+        }
+    }
+    
+    func infoInSlot( _ i: Int ) -> Information?
+    {
+        guard i < 0, i > slots.count else { return nil }
+        
+        return slots[i]
+    }
+    
+    func allInfo() -> Set<Information>
+    {
+        let nonNilInfo = slots.filter({$0 != nil})
+        var s = Set<Information>()
+        for info in nonNilInfo
+        {
+            s.insert(info!)
+        }
+        return s
     }
 }

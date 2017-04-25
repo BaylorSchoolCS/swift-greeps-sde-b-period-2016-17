@@ -25,9 +25,10 @@ extension Greep
     func contactedWater(_ water: GKPolygonObstacle)
     {
         // add obstacle to memory
-        let information = gatherInformationAbout(obstacle: water)
-        
-        // change state and behavior to wait
+        if !memory.contains( information: Information(info: water)!) && (memory.infoInSlot(0) == nil || memory.infoInSlot(1) == nil)
+        {
+            gatherInformationAbout(obstacle: water, postState: .ReturningHome, postBehavior: ReturnHomeGreepBehavior(ship: ship) )
+        }
     }
     
     func contactedShip()
@@ -42,6 +43,7 @@ extension Greep
     
     override func update(deltaTime seconds: TimeInterval) {
         super.update(deltaTime: seconds)
+        updateTimers(deltaTime: seconds)
         switch state
         {
             case .Searching:

@@ -20,6 +20,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var tomatoPiles = [TomatoPile]()
     var obstacles = Dictionary<SKNode,GKPolygonObstacle>()
     
+    private var lastUpdateTime : TimeInterval = 0
+    
+    private var lastGreepAddTime: TimeInterval = 0
     let greepDelayInterval: TimeInterval = 0.5
     
     var foundTomatoTimer: TimeInterval = 10
