@@ -139,7 +139,7 @@
 				TargetAttributes = {
 					5D7B03071E8E9CEE00959AAE = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 72SRVDG962;
+						DevelopmentTeam = Z8W2PC458R;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -317,13 +317,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 72SRVDG962;
+				DEVELOPMENT_TEAM = Z8W2PC458R;
 				INFOPLIST_FILE = Greeps/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.baylorschool.cs.Greeps;
+				PRODUCT_BUNDLE_IDENTIFIER = org.baylorschool.Greeps;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
@@ -331,13 +332,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 72SRVDG962;
+				DEVELOPMENT_TEAM = Z8W2PC458R;
 				INFOPLIST_FILE = Greeps/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.baylorschool.cs.Greeps;
+				PRODUCT_BUNDLE_IDENTIFIER = org.baylorschool.Greeps;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};
