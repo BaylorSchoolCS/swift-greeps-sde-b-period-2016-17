@@ -19,6 +19,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var water = SKNode()
     var tomatoPiles = [TomatoPile]()
     var obstacles = Dictionary<SKNode,GKPolygonObstacle>()
+    var count = 0
+    var obs = Dictionary<SKNode,GKPolygonObstacle>()
+    var scoreLabel = SKLabelNode()
+    let scoreLabelName = "scoreLabel"
     
     private var lastUpdateTime : TimeInterval = 0
     
@@ -27,6 +31,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var foundTomatoTimer: TimeInterval = 10
     var turnHomeTimer: TimeInterval = 90
+    
+
     
     override func didMove(to view: SKView) {
         self.lastUpdateTime = 0
@@ -70,6 +76,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.lastUpdateTime = currentTime
     }
+    func addScore()
+    {
+        scoreLabel = SKLabelNode(fontNamed: "ScoreLabel")
+        scoreLabel.name = scoreLabelName
+        scoreLabel.fontSize = 50
+        scoreLabel.fontColor = SKColor.white
+        scoreLabel.text = "\(count)"
+        print(size.height)
+        scoreLabel.position = CGPoint(x:frame.size.width / 20, y:frame.size.height - frame.size.height / 14)
+        self.addChild(scoreLabel)
+    }
     
     func addShip( at location: CGPoint, withGreepCount numberOfGreeps:Int )
     {
@@ -93,6 +110,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsBody.categoryBitMask = PhysicsCategory.water.rawValue
         sprite.physicsBody = physicsBody
     }
+    
     
     func addTomatoPile(at location: CGPoint, ofSize count:UInt8 )
     {
