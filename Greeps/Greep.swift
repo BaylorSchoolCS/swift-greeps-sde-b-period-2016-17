@@ -14,23 +14,12 @@ class Greep: GKEntity
     let ship: Ship
     static let defaultSpeed:Float = 40.0
     static let wanderAmount:Float = 10.0
-    var informationTimer: TimeInterval = 0
-    var state: State {
-        get
-        {
-            return self.state
-        }
-        set
-        {
-            if informationTimer <= 0
-            {
-                self.state = newValue
-            }
-        }
-    }
-    var memory1: Information?
-    var memory2: Information?
-    var memory3: Information?
+    var informationTimer: TimeInterval? = nil
+    var state: State = .Searching
+    var nextState: State?
+    var nextBehavior: GKBehavior?
+    var pendingMemory: Information? // not allowed to use this variable
+    var memory = Memory()
     var number: UInt8 = 0
     var timer: UInt8 = 0
     
@@ -77,9 +66,8 @@ class Greep: GKEntity
     init( ship: Ship, number: Int )
     {
         self.ship = ship
-        
         super.init()
-        self.state = .Searching
+        
         let shipPosition = ship.getPosition()
         let spriteComponent = GKSKNodeComponent(node: SKSpriteNode(imageNamed: "greep_green.png"))
         spriteComponent.node.setScale(0.05)
@@ -121,13 +109,60 @@ class Greep: GKEntity
         mover.rotation += delta
     }
     
-    func gatherInformationAbout( obstacle: GKObstacle ) -> Information
+    func loadTomatoFromPile( _ pile: TomatoPile )
     {
-        speed = 0
-        updateBehaviorTo(GatheringInformationBehavior())
-        informationTimer = 5 // fixed for now, would like it based on area of obstacle
-        state = .GatheringInformation
-        return Information(info: obstacle)!
+        
+    }
+    
+    func unloadTomatoPile( )
+    {
+        
+    }
+    
+    func gatherInformationAbout( obstacle: GKObstacle, postState: State, postBehavior: GKBehavior )
+    {
+        if state != .GatheringInformation
+        {
+            state = .GatheringInformation
+            updateBehaviorTo(GatheringInformationBehavior())
+            speed = 0
+            if informationTimer == nil
+            {
+                informationTimer = 5 // fixed for now, would like it based on area of obstacle
+            }
+            nextState = postState
+            nextBehavior = postBehavior
+            print( "next: \(nextBehavior)")
+            pendingMemory = Information(info: obstacle)!
+        }
+        else
+        {
+            if informationTimer! <= 0
+            {
+                didFinishGatheringInformation()
+                informationTimer = nil
+            }
+        }
+    }
+    
+    func didFinishGatheringInformation()
+    {
+        if nextState == nil
+        {
+            state = .Searching
+            updateBehaviorTo(DefaultGreepBahaviour())
+        }
+        else
+        {
+            state = nextState!
+            nextState = nil
+            print( "Doing: \(nextBehavior!)")
+            updateBehaviorTo(nextBehavior!) // probably should check...
+            nextBehavior = nil
+            
+        }
+        speed = Greep.defaultSpeed
+        memory.add(information: pendingMemory! )
     }
     
     func shareInformation(otherMemory: Set<Information>)
@@ -139,5 +174,20 @@ class Greep: GKEntity
     {
         guard let mover = component(ofType: MoveComponent.self) else { return }
         mover.behavior = newBehaviour
+    }
+    
+    func updateTimers(deltaTime seconds: TimeInterval)
+    {
+        if informationTimer != nil
+        {
+            if informationTimer! > 0
+            {
+                informationTimer! -= seconds
+            }
+            else
+            {
+                didFinishGatheringInformation()
+            }
+        }
     }
 }
