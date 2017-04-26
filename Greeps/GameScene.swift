@@ -133,6 +133,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         if w.contains(contact.contactPoint)
                         {
                             greep.contactedWater(obstacles[w]!)
+                            return
                         }
                     }
                 case PhysicsCategory.ship.rawValue:
@@ -156,6 +157,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         if w.contains(contact.contactPoint)
                         {
                             greep.contactedWater(obstacles[w]!)
+                            return
                         }
                     }
                 case PhysicsCategory.ship.rawValue:
