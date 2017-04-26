@@ -103,6 +103,7 @@ class Greep: GKEntity
         mover.rotation = newRotation
     }
     
+    
     func rotate( delta: Float )
     {
         guard let mover = component(ofType: MoveComponent.self) else { return }
@@ -116,7 +117,7 @@ class Greep: GKEntity
     
     func unloadTomatoPile( )
     {
-        
+            GameScene().count += 1
     }
     
     func gatherInformationAbout( obstacle: GKObstacle, postState: State, postBehavior: GKBehavior )
