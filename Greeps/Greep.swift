@@ -12,7 +12,7 @@ import GameplayKit
 class Greep: GKEntity
 {
     let ship: Ship
-    static let defaultSpeed:Float = 40.0
+    static let defaultSpeed:Float = 80.0
     static let wanderAmount:Float = 10.0
     var informationTimer: TimeInterval? = nil
     var timer: TimeInterval? = nil
@@ -21,7 +21,7 @@ class Greep: GKEntity
     var nextBehavior: GKBehavior?
     var pendingMemory: Information? // not allowed to use this variable
     var memory = Memory()
-    var number: UInt8 = 0
+    var number: UInt8 = 0// get rid.
     
     var speed: Float
     {
@@ -63,7 +63,7 @@ class Greep: GKEntity
         return sprite.node.name!
     }
     
-    init( ship: Ship, number: Int )
+    init( ship: Ship )
     {
         self.ship = ship
         super.init()
@@ -71,19 +71,17 @@ class Greep: GKEntity
         let shipPosition = ship.getPosition()
         let spriteComponent = GKSKNodeComponent(node: SKSpriteNode(imageNamed: "greep_green.png"))
         spriteComponent.node.setScale(0.05)
+        spriteComponent.node.entity = self
+        
         let sprite = spriteComponent.node as! SKSpriteNode
-        
         let physics = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
-        
         physics.categoryBitMask = PhysicsCategory.greep.rawValue
         physics.collisionBitMask = PhysicsCategory.water.rawValue | PhysicsCategory.boundary.rawValue
-        physics.contactTestBitMask =  (PhysicsCategory.tomato.rawValue | PhysicsCategory.water.rawValue) | (PhysicsCategory.ship.rawValue | PhysicsCategory.boundary.rawValue)
+        physics.contactTestBitMask = ( (PhysicsCategory.tomato.rawValue | PhysicsCategory.water.rawValue) | (PhysicsCategory.ship.rawValue | PhysicsCategory.greep.rawValue) ) | PhysicsCategory.boundary.rawValue
         physics.affectedByGravity = false
-
         spriteComponent.node.physicsBody = physics
         spriteComponent.node.position = shipPosition
-        physics.node!.name = "greep\(number)"
-        
+
         addComponent(spriteComponent)
         
         let mover = MoveComponent(ship: ship)
@@ -91,6 +89,7 @@ class Greep: GKEntity
         mover.position = float2( x: Float(shipPosition.x), y: Float(shipPosition.y))
         spriteComponent.node.zRotation = CGFloat(mover.rotation)
         addComponent(mover)
+        studentInitialization()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -146,15 +145,10 @@ class Greep: GKEntity
     
     func didFinishGatheringInformation()
     {
-        timerElapsed()
+        changeToNextBehavior()
         informationTimer = nil
         speed = Greep.defaultSpeed
         memory.add(information: pendingMemory! )
-    }
-    
-    func shareInformation(otherMemory: Set<Information>)
-    {
-        
     }
     
     func updateBehaviorTo( _ newBehaviour: GKBehavior )
@@ -163,7 +157,7 @@ class Greep: GKEntity
         mover.behavior = newBehaviour
     }
     
-    func timerElapsed()
+    func changeToNextBehavior()
     {
         if nextState == nil
         {
@@ -206,7 +200,7 @@ class Greep: GKEntity
             }
             else
             {
-                timerElapsed()
+                changeToNextBehavior()
                 timer = nil
             }
         }

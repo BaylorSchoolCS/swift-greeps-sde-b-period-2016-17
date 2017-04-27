@@ -15,9 +15,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var graphs = [String : GKGraph]()
     
     var ship: Ship = Ship()
-    var greeps = Dictionary<String,Greep>()
     var water = SKNode()
-    var tomatoPiles = [TomatoPile]()
     var obstacles = Dictionary<SKNode,GKPolygonObstacle>()
     var count = 0
     var obs = Dictionary<SKNode,GKPolygonObstacle>()
@@ -54,7 +52,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if ship.shouldSpawnGreep && currentTime - lastGreepAddTime > greepDelayInterval
         {
             let greep = ship.spawnGreep()
-            greeps[greep.name] = greep
             entities.append(greep)
             addChild(greep.sprite!)
             lastGreepAddTime = currentTime
@@ -115,14 +112,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func addTomatoPile(at location: CGPoint, ofSize count:UInt8 )
     {
         let pile = TomatoPile(location: location, count: count)
-        tomatoPiles.append(pile)
-        addChild(pile.node)
+        addChild(pile.sprite!)
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
         if contact.bodyA.categoryBitMask == PhysicsCategory.greep.rawValue
         {
-            let greep = greeps[contact.bodyA.node!.name!]!
+            let greep = contact.bodyA.node!.entity as! Greep
             switch contact.bodyB.categoryBitMask
             {
                 case PhysicsCategory.boundary.rawValue:
@@ -137,16 +133,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         }
                     }
                 case PhysicsCategory.ship.rawValue:
+                    greep.unloadTomatoPile()
                     greep.contactedShip()
                 case PhysicsCategory.tomato.rawValue:
-                    greep.contactedTomato()
+                    let tomatoPile = contact.bodyB.node!.entity as! TomatoPile
+                    greep.contactedTomato(tomatoPile)
+                    break
+                case PhysicsCategory.greep.rawValue:
+                    let otherGreep = contact.bodyB.node!.entity as! Greep
+                    greep.contactedGreep( otherGreep )
                 default:
                     return
             }
         }
         else if contact.bodyB.categoryBitMask == PhysicsCategory.greep.rawValue
         {
-            let greep = greeps[contact.bodyB.node!.name!]!
+            let greep = contact.bodyB.node!.entity as! Greep
             switch contact.bodyA.categoryBitMask
             {
                 case PhysicsCategory.boundary.rawValue:
@@ -161,9 +163,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         }
                     }
                 case PhysicsCategory.ship.rawValue:
+                    greep.unloadTomatoPile()
                     greep.contactedShip()
                 case PhysicsCategory.tomato.rawValue:
-                    greep.contactedTomato()
+                    let tomatoPile = contact.bodyA.node!.entity as! TomatoPile
+                    greep.contactedTomato(tomatoPile)
+                    break
+                case PhysicsCategory.greep.rawValue:
+                    let otherGreep = contact.bodyA.node!.entity as! Greep
+                    greep.contactedGreep( otherGreep )
                 default:
                     return
             }

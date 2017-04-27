@@ -60,7 +60,7 @@ class Ship: GKEntity
     func spawnGreep() -> Greep
     {
         spawnedGreeps += 1
-        let greep = Greep( ship: self, number: spawnedGreeps )
+        let greep = Greep( ship: self )
         return greep
     }
 }

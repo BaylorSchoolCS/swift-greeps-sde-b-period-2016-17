@@ -17,6 +17,12 @@ extension Greep
         //add in up to four more states
     }
     
+    func studentInitialization()
+    {
+        
+    }
+    
+    
     func contactedEdge()
     {
         updateBehaviorTo(ReturnHomeGreepBehavior(ship: ship))
@@ -42,9 +48,20 @@ extension Greep
         
     }
     
-    func contactedTomato()
+    func contactedTomato( _ pile: TomatoPile )
     {
-        
+        loadTomatoFromPile(pile)
+        updateBehaviorTo(ReturnHomeGreepBehavior(ship: ship))
+        // load tomato
+        // head home
+        // define next state
+        // define next behavior
+    }
+    
+    func contactedGreep( _ otherGreep: Greep )
+    {
+//        print( "I, \(sprite?.physicsBody?.node?.name), contacted \(otherGreep.sprite?.physicsBody?.node?.name)")
+//        rotate(delta: 50)
     }
     
     override func update(deltaTime seconds: TimeInterval) {

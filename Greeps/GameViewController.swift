@@ -31,7 +31,7 @@ class GameViewController: UIViewController {
                 sceneNode.addChild(sceneNode.water)
                 sceneNode.addShip(at: CGPoint(x:300,y:500), withGreepCount: 10)
                 sceneNode.addWater( ofType: "water1", at: CGPoint(x:800,y:200), scaledBy:0.2, rotatedBy: 50)
-                sceneNode.addTomatoPile(at: CGPoint( x:900, y:100), ofSize: 10 )
+                sceneNode.addTomatoPile(at: CGPoint( x:900, y:100), ofSize: 8 )
                 sceneNode.addScore()
                 // Present the scene
                 if let view = self.view as! SKView? {
@@ -41,7 +41,7 @@ class GameViewController: UIViewController {
                     
                     view.showsFPS = true
                     view.showsNodeCount = true
-                    view.showsPhysics = true
+                    view.showsPhysics = false
                 }
                 
                 
