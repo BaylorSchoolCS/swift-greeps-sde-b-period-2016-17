@@ -26,11 +26,7 @@ extension Greep
     // This function gets called when this greep comes in contact with the edge
     func contactedEdge()
     {
-        updateBehaviorTo(ReturnHomeGreepBehavior(ship: ship))
-        timer = 2
-        state = .AvoidingObstacle
-        nextState = .Searching
-        nextBehavior = DefaultGreepBahavior()
+        perform(behavior: ReturnHomeGreepBehavior(ship: ship), forMilliseconds: 2000, withState: .AvoidingObstacle, postState: .Searching, postBehavior: DefaultGreepBahavior())
     }
     
     // This function gets called when this greep comes in contact with the water
@@ -85,6 +81,5 @@ extension Greep
     
     override func update(deltaTime seconds: TimeInterval) {
         super.update(deltaTime: seconds)
-        updateTimers(deltaTime: seconds)
     }
 }

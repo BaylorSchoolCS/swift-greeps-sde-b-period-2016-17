@@ -27,11 +27,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var lastGreepAddTime: TimeInterval = 0
     let greepDelayInterval: TimeInterval = 0.5
     
-    var foundTomatoTimer: TimeInterval = 10
-    var turnHomeTimer: TimeInterval = 90
-    
-
-    
     override func didMove(to view: SKView) {
         self.lastUpdateTime = 0
         physicsWorld.contactDelegate = self

@@ -18,7 +18,6 @@ class Greep: GKEntity
     static let gatherInformationTime: DispatchTimeInterval = .milliseconds(5000)
     static let shareInformationTime: DispatchTimeInterval = .milliseconds(1000)
     
-    var timer: TimeInterval? = nil
     var state: State = .Searching
     var nextState: State?
     var nextBehavior: GKBehavior?
@@ -59,13 +58,6 @@ class Greep: GKEntity
         }
     }
     
-    var name: String
-    {
-        guard let sprite = component(ofType: GKSKNodeComponent.self) else { return "no name" }
-        
-        return sprite.node.name!
-    }
-    
     init( ship: Ship )
     {
         self.ship = ship
@@ -84,7 +76,6 @@ class Greep: GKEntity
         physics.affectedByGravity = false
         spriteComponent.node.physicsBody = physics
         spriteComponent.node.position = shipPosition
-
         addComponent(spriteComponent)
         
         let mover = MoveComponent(ship: ship)
@@ -97,12 +88,6 @@ class Greep: GKEntity
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func setRotation( newRotation: Float )
-    {
-        guard let mover = component(ofType: MoveComponent.self) else { return }
-        mover.rotation = newRotation
     }
     
     func rotate( delta: Float )
@@ -119,6 +104,19 @@ class Greep: GKEntity
     func unloadTomatoPile( )
     {
         
+    }
+    
+    func perform( behavior newBehavior: GKBehavior, forMilliseconds ms: Int, withState newState: Greep.State, postState: Greep.State, postBehavior: GKBehavior )
+    {
+        if state != newState
+        {
+            state = newState
+            updateBehaviorTo(newBehavior)
+            GameViewController.delayQueue.asyncAfter(deadline: .now() + .milliseconds(ms)) {
+                self.state = postState
+                self.updateBehaviorTo(postBehavior)
+            }
+        }
     }
     
     func storeTomatoLocationAbout( _ pile: TomatoPile, overwriteObstacle: Bool, overwriteOtherTomatoPile: Bool )
@@ -150,7 +148,7 @@ class Greep: GKEntity
         if state != .GatheringInformation
         {
             state = .GatheringInformation
-            updateBehaviorTo(GatheringInformationBehavior()) // necessary?
+            updateBehaviorTo(GatheringInformationBehavior())
             speed = 0
             if let pendingInfo = Information(info: obstacle)
             {
@@ -209,7 +207,7 @@ class Greep: GKEntity
         if nextState == nil
         {
             state = .Searching
-            updateBehaviorTo(DefaultGreepBahaviour())
+            updateBehaviorTo(DefaultGreepBahavior())
         }
         else
         {
@@ -217,26 +215,10 @@ class Greep: GKEntity
             nextState = nil
             if nextBehavior == nil
             {
-                nextBehavior = DefaultGreepBahaviour()
+                nextBehavior = DefaultGreepBahavior()
             }
             updateBehaviorTo(nextBehavior!)
             nextBehavior = nil
-        }
-    }
-    
-    func updateTimers(deltaTime seconds: TimeInterval)
-    {
-        if timer != nil
-        {
-            if timer! > 0
-            {
-                timer! -= seconds
-            }
-            else
-            {
-                changeToNextBehavior()
-                timer = nil
-            }
         }
     }
 }
