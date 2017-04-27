@@ -9,7 +9,7 @@
 import Foundation
 import GameplayKit
 
-class DefaultGreepBahaviour: GKBehavior
+class DefaultGreepBahavior: GKBehavior
 {
     override init() {
         super.init()

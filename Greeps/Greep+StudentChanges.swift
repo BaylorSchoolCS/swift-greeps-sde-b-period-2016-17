@@ -30,7 +30,7 @@ extension Greep
         timer = 2
         state = .AvoidingObstacle
         nextState = .Searching
-        nextBehavior = DefaultGreepBahaviour()
+        nextBehavior = DefaultGreepBahavior()
     }
     
     // This function gets called when this greep comes in contact with the water
@@ -65,7 +65,7 @@ extension Greep
     // This function gets called when this greep comes in contact with another greep
     func contactedGreep( _ otherGreep: Greep )
     {
-        shareInformationWith(otherGreep, postState: .Search, postBehavior: DefaultGreepBehavior())
+        shareInformationWith(otherGreep, postState: .Searching, postBehavior: DefaultGreepBahavior())
 //        print( "I, \(sprite?.physicsBody?.node?.name), contacted \(otherGreep.sprite?.physicsBody?.node?.name)")
 //        rotate(delta: 50)
     }
