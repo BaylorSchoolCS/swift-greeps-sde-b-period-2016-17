@@ -39,11 +39,16 @@ class TomatoPile: GKEntity
         return sprite.node
     }
     
+    convenience init( location: CGPoint )
+    {
+        self.init( location: location, count: UInt8( 1 + arc4random() % 40 ) )
+    }
+    
     init( location: CGPoint, count qty: UInt8 )
     {
         tomatoCount = qty
         previousCount = qty
-        self.count = Count.countForQuantity(qty)
+        self.count = Count.countForQuantity(tomatoCount)
         super.init()
         
         let spriteComponent = GKSKNodeComponent(node: SKSpriteNode(imageNamed: "tomatoPile-\(count)"))

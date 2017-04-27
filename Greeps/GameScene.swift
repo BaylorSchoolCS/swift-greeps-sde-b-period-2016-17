@@ -108,6 +108,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         sprite.physicsBody = physicsBody
     }
     
+    func addTomatoPile(at location: CGPoint)
+    {
+        let pile = TomatoPile(location: location)
+        addChild(pile.sprite!)
+    }
     
     func addTomatoPile(at location: CGPoint, ofSize count:UInt8 )
     {

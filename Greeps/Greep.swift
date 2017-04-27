@@ -12,9 +12,12 @@ import GameplayKit
 class Greep: GKEntity
 {
     let ship: Ship
+
     static let defaultSpeed:Float = 80.0
     static let wanderAmount:Float = 10.0
-    var informationTimer: TimeInterval? = nil
+    static let gatherInformationTime: DispatchTimeInterval = .milliseconds(5000)
+    static let shareInformationTime: DispatchTimeInterval = .milliseconds(1000)
+    
     var timer: TimeInterval? = nil
     var state: State = .Searching
     var nextState: State?
@@ -118,37 +121,81 @@ class Greep: GKEntity
         
     }
     
+    func storeTomatoLocationAbout( _ pile: TomatoPile, overwriteObstacle: Bool, overwriteOtherTomatoPile: Bool )
+    {
+        guard let info = Information(info: pile) else { fatalError("invalid information") }
+        if memory.hasEmptySlot()
+        {
+            memory.add( information: info )
+        }
+        else if overwriteObstacle || overwriteOtherTomatoPile
+        {
+            for i in 0...2
+            {
+                if let infoInSlot = memory.infoInSlot(i)
+                {
+                    if (infoInSlot.isObstacle && overwriteObstacle) || (infoInSlot.isTomato && overwriteOtherTomatoPile)
+                    {
+                        memory.add(information: info, toSlot: i)
+                        return
+                    }
+                }
+            }
+        }
+        
+    }
+    
     func gatherInformationAbout( obstacle: GKObstacle, postState: State, postBehavior: GKBehavior )
     {
         if state != .GatheringInformation
         {
             state = .GatheringInformation
-            updateBehaviorTo(GatheringInformationBehavior())
+            updateBehaviorTo(GatheringInformationBehavior()) // necessary?
             speed = 0
-            if informationTimer == nil
+            if let pendingInfo = Information(info: obstacle)
             {
-                informationTimer = 5 // fixed for now, would like it based on area of obstacle
-            }
-            nextState = postState
-            nextBehavior = postBehavior
-            print( "next: \(nextBehavior)")
-            pendingMemory = Information(info: obstacle)!
-        }
-        else
-        {
-            if informationTimer! <= 0
-            {
-                didFinishGatheringInformation()
+                GameViewController.delayQueue.asyncAfter(deadline: .now() + Greep.gatherInformationTime) {
+                    self.state = postState
+                    self.updateBehaviorTo(postBehavior)
+                    self.memory.add(information: pendingInfo )
+                    self.speed = Greep.defaultSpeed
+                }
             }
         }
     }
     
-    func didFinishGatheringInformation()
+    func didGatherInformation()
     {
-        changeToNextBehavior()
-        informationTimer = nil
-        speed = Greep.defaultSpeed
-        memory.add(information: pendingMemory! )
+        
+    }
+    
+    func willShareInformation()
+    {
+        if state != .SharingInformation
+        {
+            state = .SharingInformation
+            speed = 0
+        }
+    }
+    
+    func shareInformationWith( _ otherGreep: Greep, postState: State, postBehavior: GKBehavior )
+    {
+        willShareInformation()
+        otherGreep.willShareInformation()
+        GameViewController.delayQueue.asyncAfter(deadline: .now() + Greep.shareInformationTime) {
+            self.state = postState
+            self.updateBehaviorTo(postBehavior)
+            self.exchangeInformationWith( otherGreep )
+            self.speed = Greep.defaultSpeed
+            otherGreep.speed = Greep.defaultSpeed
+            otherGreep.postSharedWith()
+        }
+        
+    }
+    
+    func didShareInformation()
+    {
+
     }
     
     func updateBehaviorTo( _ newBehaviour: GKBehavior )
@@ -172,7 +219,6 @@ class Greep: GKEntity
             {
                 nextBehavior = DefaultGreepBahaviour()
             }
-            print( "Doing: \(nextBehavior!)")
             updateBehaviorTo(nextBehavior!)
             nextBehavior = nil
         }
@@ -180,18 +226,6 @@ class Greep: GKEntity
     
     func updateTimers(deltaTime seconds: TimeInterval)
     {
-        if informationTimer != nil
-        {
-            if informationTimer! > 0
-            {
-                informationTimer! -= seconds
-            }
-            else
-            {
-                didFinishGatheringInformation()
-            }
-        }
-        
         if timer != nil
         {
             if timer! > 0
