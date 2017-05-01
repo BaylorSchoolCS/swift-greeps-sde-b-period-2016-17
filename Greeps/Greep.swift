@@ -103,6 +103,13 @@ class Greep: GKEntity
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setRotation( newRotation: Float )
+    {
+        guard let mover = component(ofType: MoveComponent.self) else { return }
+        mover.rotation = newRotation
+    }
+    
+    
     func rotate( delta: Float )
     {
         guard let mover = component(ofType: MoveComponent.self) else { return }
@@ -116,7 +123,10 @@ class Greep: GKEntity
     
     func unloadTomatoPile( )
     {
-        
+            GameScene().count += 1
+            state = .Searching
+            let spriteComponent = GKSKNodeComponent(node: SKSpriteNode(imageNamed: "greep_green.png"))
+            spriteComponent.node.setScale(0.05)
     }
     
     func perform( behavior newBehavior: GKBehavior, forMilliseconds ms: Int, withState newState: Greep.State, postState: Greep.State, postBehavior: GKBehavior )
