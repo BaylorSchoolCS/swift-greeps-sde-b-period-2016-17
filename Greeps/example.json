@@ -1,0 +1,25 @@
+{
+    "maps": [
+                {
+                    "map" : 1,
+                    "shipX" : 300,
+                    "shipY":  500,
+                    "obstacles": [
+                        {
+                            "x": 800,
+                            "y": 200,
+                            "scale": 0.2,
+                            "rotation": 50
+                        }
+                    ]
+                    "tomatoes": [
+                        {
+                            "x": 900,
+                            "y": 100,
+                            "count": 5
+                        }
+                    ]
+                }
+             
+            ]
+}

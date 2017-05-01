@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		50BD058C1EA0351300EF774A /* TomatoPile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BD058B1EA0351300EF774A /* TomatoPile.swift */; };
+		5D0256F41EB78AAC00307502 /* example.json in Resources */ = {isa = PBXBuildFile; fileRef = 5D0256F31EB78AAC00307502 /* example.json */; };
 		5D7B030C1E8E9CEE00959AAE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D7B030B1E8E9CEE00959AAE /* AppDelegate.swift */; };
 		5D7B030E1E8E9CEE00959AAE /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5D7B030D1E8E9CEE00959AAE /* GameScene.sks */; };
 		5D7B03101E8E9CEE00959AAE /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5D7B030F1E8E9CEE00959AAE /* Actions.sks */; };
@@ -29,6 +30,7 @@
 
 /* Begin PBXFileReference section */
 		50BD058B1EA0351300EF774A /* TomatoPile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TomatoPile.swift; path = ../TomatoPile.swift; sourceTree = "<group>"; };
+		5D0256F31EB78AAC00307502 /* example.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = example.json; sourceTree = "<group>"; };
 		5D7B03081E8E9CEE00959AAE /* Greeps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Greeps.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D7B030B1E8E9CEE00959AAE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5D7B030D1E8E9CEE00959AAE /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 				5D7B03181E8E9CEE00959AAE /* Assets.xcassets */,
 				5D7B031A1E8E9CEE00959AAE /* LaunchScreen.storyboard */,
 				5D7B031D1E8E9CEE00959AAE /* Info.plist */,
+				5D0256F31EB78AAC00307502 /* example.json */,
 			);
 			path = Greeps;
 			sourceTree = "<group>";
@@ -169,6 +172,7 @@
 			files = (
 				5D7B03171E8E9CEE00959AAE /* Main.storyboard in Resources */,
 				5D7B030E1E8E9CEE00959AAE /* GameScene.sks in Resources */,
+				5D0256F41EB78AAC00307502 /* example.json in Resources */,
 				5D7B03191E8E9CEE00959AAE /* Assets.xcassets in Resources */,
 				5D7B031C1E8E9CEE00959AAE /* LaunchScreen.storyboard in Resources */,
 				5D7B03101E8E9CEE00959AAE /* Actions.sks in Resources */,
