@@ -79,6 +79,12 @@ extension Greep
         
     }
     
+    // This function gets called after the tomato has been unloaded at the ship
+    func postUnloadTomato()
+    {
+        
+    }
+    
     override func update(deltaTime seconds: TimeInterval) {
         super.update(deltaTime: seconds)
     }

@@ -22,6 +22,8 @@ class Greep: GKEntity
     var memory = Memory()
     var number: UInt8 = 0
     
+    var isCarryingTomato = false
+    
     var speed: Float
     {
         get {
@@ -36,8 +38,15 @@ class Greep: GKEntity
     
     var sprite: SKNode
     {
-        guard let sprite = component(ofType: GKSKNodeComponent.self) else { fatalError("sprite component hasn't been created") }
-        return sprite.node
+        get {
+            guard let sprite = component(ofType: GKSKNodeComponent.self) else { fatalError("sprite component hasn't been created") }
+            return sprite.node
+        }
+        set(newSprite)
+        {
+            guard let sprite = component(ofType: GKSKNodeComponent.self) else { fatalError("sprite component hasn't been created") }
+            sprite.node = newSprite
+        }
     }
     
     var mover: MoveComponent
@@ -123,10 +132,15 @@ class Greep: GKEntity
     
     func unloadTomatoPile( )
     {
-            GameScene().count += 1
-            state = .Searching
-            let spriteComponent = GKSKNodeComponent(node: SKSpriteNode(imageNamed: "greep_green.png"))
-            spriteComponent.node.setScale(0.05)
+        isCarryingTomato = false
+        ship.addTomato()
+        speed = 0
+        state = .Waiting
+        behavior = WaitGreepBehavior()
+        let newSprite = SKSpriteNode(imageNamed: "greep_green.png")
+        newSprite.setScale(0.05)
+        sprite = newSprite
+        postUnloadTomato()
     }
     
     func perform( behavior newBehavior: GKBehavior, forMilliseconds ms: Int, withState newState: Greep.State, postState: Greep.State, postBehavior: GKBehavior )

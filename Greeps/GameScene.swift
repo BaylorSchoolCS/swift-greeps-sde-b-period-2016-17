@@ -14,7 +14,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var entities = [GKEntity]()
     var graphs = [String : GKGraph]()
     
-    var ship: Ship = Ship()
+    var ship: Ship?
     var water = SKNode()
     var obstacles = Dictionary<SKNode,GKPolygonObstacle>()
     var count = 0
@@ -29,6 +29,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func didMove(to view: SKView) {
         self.lastUpdateTime = 0
         physicsWorld.contactDelegate = self
+        ship!.scene = self
         for w in water.children
         {
             let ob = SKNode.obstacles(fromNodeBounds: [w])
@@ -60,9 +61,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
-        if ship.shouldSpawnGreep && currentTime - lastGreepAddTime > greepDelayInterval
+        if ship!.shouldSpawnGreep && currentTime - lastGreepAddTime > greepDelayInterval
         {
-            let greep = ship.spawnGreep()
+            let greep = ship!.spawnGreep()
             entities.append(greep)
             addChild(greep.sprite)
             lastGreepAddTime = currentTime
@@ -97,10 +98,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func addShip( at location: CGPoint, withGreepCount numberOfGreeps:Int )
     {
-        ship.setPosition(position: location)
-        ship.greepsToSpawn = numberOfGreeps
-        entities.append(ship)
-        addChild(ship.sprite!)
+        let newShip = Ship(withScene:self)
+        newShip.setPosition(position: location)
+        newShip.greepsToSpawn = numberOfGreeps
+        entities.append(newShip)
+        addChild(newShip.sprite!)
+        self.ship = newShip
     }
     
     func addWater( ofType fileName: String, at location: CGPoint, scaledBy scale:Float, rotatedBy rotation: Float)

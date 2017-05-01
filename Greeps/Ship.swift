@@ -11,6 +11,7 @@ import GameplayKit
 
 class Ship: GKEntity
 {
+    var scene: GameScene
     var greepsToSpawn: Int = 0
     var spawnedGreeps: Int = 0
     
@@ -30,8 +31,9 @@ class Ship: GKEntity
         return component(ofType: GKAgent2D.self)!
     }
     
-    override init()
+    init( withScene scene: GameScene )
     {
+        self.scene = scene
         super.init()
         let sprite = SpriteComponent(texture: SKTexture(imageNamed: "ship.png"))
         sprite.node.physicsBody?.categoryBitMask = PhysicsCategory.ship.rawValue
@@ -62,5 +64,10 @@ class Ship: GKEntity
         spawnedGreeps += 1
         let greep = Greep( ship: self )
         return greep
+    }
+    
+    func addTomato()
+    {
+        scene.count += 1
     }
 }
