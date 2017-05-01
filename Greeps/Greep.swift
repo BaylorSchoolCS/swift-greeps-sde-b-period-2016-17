@@ -118,6 +118,9 @@ class Greep: GKEntity
     func unloadTomatoPile( )
     {
             GameScene().count += 1
+            state = .Searching
+            let spriteComponent = GKSKNodeComponent(node: SKSpriteNode(imageNamed: "greep_green.png"))
+            spriteComponent.node.setScale(0.05)
     }
     
     func gatherInformationAbout( obstacle: GKObstacle, postState: State, postBehavior: GKBehavior )
