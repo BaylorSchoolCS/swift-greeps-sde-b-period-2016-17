@@ -1,0 +1,17 @@
+{
+	“maps”: [
+	{
+	 “map” : “one”,
+	 “shipX” : 300,
+	 “shipY”:  500,
+	 “waterX”: 800,
+	 “waterY”: 200,
+	 “waterScale”: 0.2,
+	 ”waterRotation”: 50,
+	 “tomatoX”: 900, 
+	 “tomatoY”: 100, 
+	 “tomatoScale”: 10, 
+	 “greepCount”: 5
+	}
+	],
+}
