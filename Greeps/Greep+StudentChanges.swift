@@ -13,7 +13,7 @@ extension Greep
 {
     enum State
     {
-        case Searching, ReturningHome, Waiting, AvoidingObstacle, GatheringInformation, SharingInformation
+        case Searching, AtEdge, AtWater, ReturningHome, Waiting, AvoidingObstacle, GatheringInformation, SharingInformation
         //add in up to four more states
     }
     
@@ -51,7 +51,7 @@ extension Greep
     func contactedTomato( _ pile: TomatoPile )
     {
         loadTomatoFromPile(pile)
-        updateBehaviorTo(ReturnHomeGreepBehavior(ship: ship))
+        behavior = ReturnHomeGreepBehavior(ship: ship)
         // load tomato
         // head home
         // define next state

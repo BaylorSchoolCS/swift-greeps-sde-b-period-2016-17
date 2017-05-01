@@ -18,7 +18,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var water = SKNode()
     var obstacles = Dictionary<SKNode,GKPolygonObstacle>()
     var count = 0
-    var obs = Dictionary<SKNode,GKPolygonObstacle>()
     var scoreLabel = SKLabelNode()
     let scoreLabelName = "scoreLabel"
     
@@ -36,10 +35,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             obstacles[w] = ob.first!
         }
         
+        for (_,obst) in obstacles
+        {
+            let path = UIBezierPath()
+            let initialPoint = obst.vertex(at: 0)
+            path.move(to: CGPoint(x: CGFloat(initialPoint.x), y: CGFloat(initialPoint.y)))
+            for i in 0..<obst.vertexCount
+            {
+                let v = obst.vertex(at: i)
+                path.addLine(to: CGPoint(x: CGFloat(v.x), y: CGFloat(v.y)))
+            }
+            path.close()
+            let shape = SKShapeNode(path: path.cgPath)
+            shape.strokeColor = UIColor.red
+            addChild(shape)
+        }
+        
 
         self.scaleMode = .aspectFit
-        self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
-        self.physicsBody?.categoryBitMask = PhysicsCategory.boundary.rawValue
+        let framePhysicsLoop = SKPhysicsBody(edgeLoopFrom: self.frame)
+        framePhysicsLoop.categoryBitMask = PhysicsCategory.boundary.rawValue
+        self.physicsBody = framePhysicsLoop
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -48,7 +64,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         {
             let greep = ship.spawnGreep()
             entities.append(greep)
-            addChild(greep.sprite!)
+            addChild(greep.sprite)
             lastGreepAddTime = currentTime
         }
         
@@ -75,7 +91,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.fontSize = 50
         scoreLabel.fontColor = SKColor.white
         scoreLabel.text = "\(count)"
-        print(size.height )
         scoreLabel.position = CGPoint(x:frame.size.width / 20, y:frame.size.height - frame.size.height / 14)
         self.addChild(scoreLabel)
     }
@@ -90,17 +105,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func addWater( ofType fileName: String, at location: CGPoint, scaledBy scale:Float, rotatedBy rotation: Float)
     {
-        let sprite = SKSpriteNode(imageNamed: "\(fileName).png")
-        water.addChild(sprite)
+        let texture = SKTexture(imageNamed: "\(fileName).png")
+        let sprite = SKSpriteNode(texture: texture)
         sprite.setScale(CGFloat(scale))
         sprite.zRotation = CGFloat(rotation)
         sprite.position = location
-        guard let texture = sprite.texture else { fatalError("no sprite") }
         let physicsBody = SKPhysicsBody(texture: texture, alphaThreshold: 0.3, size: sprite.size)
         physicsBody.isDynamic = false
         physicsBody.affectedByGravity = false
         physicsBody.categoryBitMask = PhysicsCategory.water.rawValue
         sprite.physicsBody = physicsBody
+        water.addChild(sprite)
     }
     
     func addTomatoPile(at location: CGPoint)
@@ -122,8 +137,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             switch contact.bodyB.categoryBitMask
             {
                 case PhysicsCategory.boundary.rawValue:
+                    greep.state = .AtEdge
+                    greep.speed = 0
+                    greep.behavior = WaitGreepBehavior()
                     greep.contactedEdge()
                 case PhysicsCategory.water.rawValue:
+                    greep.speed = 0
+                    greep.state = .AtWater
                     for w in water.children
                     {
                         if w.contains(contact.contactPoint)
@@ -152,8 +172,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             switch contact.bodyA.categoryBitMask
             {
                 case PhysicsCategory.boundary.rawValue:
+                    greep.speed = 0
+                    greep.state = .AtEdge
+                    greep.behavior = WaitGreepBehavior()
                     greep.contactedEdge()
                 case PhysicsCategory.water.rawValue:
+                    greep.speed = 0
+                    greep.state = .AtWater
                     for w in water.children
                     {
                         if w.contains(contact.contactPoint)

@@ -19,11 +19,8 @@ class Greep: GKEntity
     static let shareInformationTime: DispatchTimeInterval = .milliseconds(1000)
     
     var state: State = .Searching
-    var nextState: State?
-    var nextBehavior: GKBehavior?
-    var pendingMemory: Information? // not allowed to use this variable
     var memory = Memory()
-    var number: UInt8 = 0// get rid.
+    var number: UInt8 = 0
     
     var speed: Float
     {
@@ -37,24 +34,40 @@ class Greep: GKEntity
         }
     }
     
-    var sprite: SKNode?
+    var sprite: SKNode
     {
-        guard let sprite = component(ofType: GKSKNodeComponent.self) else { return nil }
+        guard let sprite = component(ofType: GKSKNodeComponent.self) else { fatalError("sprite component hasn't been created") }
         return sprite.node
+    }
+    
+    var mover: MoveComponent
+    {
+        guard let moverComponent = component(ofType: MoveComponent.self) else { fatalError("move component hasn't been created") }
+        return moverComponent
     }
     
     var position: CGPoint
     {
         get
         {
-            guard let mover = component(ofType: MoveComponent.self) else { fatalError("move component has been created") }
             return CGPoint( x: CGFloat(mover.position.x), y: CGFloat(mover.position.y) )
         }
         
         set( newPosition )
         {
-            guard let mover = component(ofType: MoveComponent.self) else { fatalError("move component has been created") }
             mover.position = float2(x: Float(newPosition.x), y: Float(newPosition.y))
+        }
+    }
+    
+    var behavior: GKBehavior
+    {
+        get
+        {
+            return mover.behavior!
+        }
+        set( newBehavior )
+        {
+            mover.behavior = newBehavior
         }
     }
     
@@ -111,10 +124,10 @@ class Greep: GKEntity
         if state != newState
         {
             state = newState
-            updateBehaviorTo(newBehavior)
+            behavior = newBehavior
             GameViewController.delayQueue.asyncAfter(deadline: .now() + .milliseconds(ms)) {
                 self.state = postState
-                self.updateBehaviorTo(postBehavior)
+                self.behavior = postBehavior
             }
         }
     }
@@ -148,13 +161,13 @@ class Greep: GKEntity
         if state != .GatheringInformation
         {
             state = .GatheringInformation
-            updateBehaviorTo(GatheringInformationBehavior())
+            behavior = GatheringInformationBehavior()
             speed = 0
             if let pendingInfo = Information(info: obstacle)
             {
                 GameViewController.delayQueue.asyncAfter(deadline: .now() + Greep.gatherInformationTime) {
                     self.state = postState
-                    self.updateBehaviorTo(postBehavior)
+                    self.behavior = postBehavior
                     self.memory.add(information: pendingInfo )
                     self.speed = Greep.defaultSpeed
                 }
@@ -162,63 +175,37 @@ class Greep: GKEntity
         }
     }
     
-    func didGatherInformation()
-    {
-        
-    }
-    
-    func willShareInformation()
+    func willShareInformation() -> (State, GKBehavior)
     {
         if state != .SharingInformation
         {
+            let previousState = state
+            let previousBehavior = behavior
             state = .SharingInformation
+            behavior = GatheringInformationBehavior()
             speed = 0
-        }
-    }
-    
-    func shareInformationWith( _ otherGreep: Greep, postState: State, postBehavior: GKBehavior )
-    {
-        willShareInformation()
-        otherGreep.willShareInformation()
-        GameViewController.delayQueue.asyncAfter(deadline: .now() + Greep.shareInformationTime) {
-            self.state = postState
-            self.updateBehaviorTo(postBehavior)
-            self.exchangeInformationWith( otherGreep )
-            self.speed = Greep.defaultSpeed
-            otherGreep.speed = Greep.defaultSpeed
-            otherGreep.postSharedWith()
-        }
-        
-    }
-    
-    func didShareInformation()
-    {
-
-    }
-    
-    func updateBehaviorTo( _ newBehaviour: GKBehavior )
-    {
-        guard let mover = component(ofType: MoveComponent.self) else { return }
-        mover.behavior = newBehaviour
-    }
-    
-    func changeToNextBehavior()
-    {
-        if nextState == nil
-        {
-            state = .Searching
-            updateBehaviorTo(DefaultGreepBahavior())
+            return (previousState, previousBehavior)
         }
         else
         {
-            state = nextState!
-            nextState = nil
-            if nextBehavior == nil
-            {
-                nextBehavior = DefaultGreepBahavior()
-            }
-            updateBehaviorTo(nextBehavior!)
-            nextBehavior = nil
+            return (state,behavior)
         }
+    }
+    
+    func shareInformationWith( _ otherGreep: Greep, postState: State? = nil, postBehavior: GKBehavior? = nil)
+    {
+        let (previousState, previousBehavior) = willShareInformation()
+        let (otherGreepPreviousState, otherGreepPreviousBehavior) = otherGreep.willShareInformation()
+        GameViewController.delayQueue.asyncAfter(deadline: .now() + Greep.shareInformationTime) {
+            self.state = postState == nil ? previousState : postState!
+            self.behavior = postBehavior == nil ? previousBehavior : postBehavior!
+            self.exchangeInformationWith( otherGreep )
+            self.speed = (self.state == .AtWater || self.state == .AtEdge ) ? 0 : Greep.defaultSpeed  
+            otherGreep.state = otherGreepPreviousState
+            otherGreep.speed = (otherGreep.state == .AtWater || otherGreep.state == .AtEdge ) ? 0 : Greep.defaultSpeed
+            otherGreep.behavior = otherGreepPreviousBehavior
+            otherGreep.postSharedWith()
+        }
+        
     }
 }
