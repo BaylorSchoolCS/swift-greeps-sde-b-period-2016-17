@@ -13,19 +13,23 @@ extension Greep
 {
     enum State
     {
-        case Searching, ReturningHome, Waiting, AvoidingObstacle, GatheringInformation
+        case Searching, ReturningHome, Waiting, AvoidingObstacle, GatheringInformation, SharingInformation
         //add in up to four more states
     }
     
-    func contactedEdge()
+    // This function gets called at the end of the Greep init() 
+    func studentInitialization()
     {
-        updateBehaviorTo(ReturnHomeGreepBehavior(ship: ship))
-        timer = 2
-        state = .AvoidingObstacle
-        nextState = .Searching
-        nextBehavior = DefaultGreepBahaviour()
+        
     }
     
+    // This function gets called when this greep comes in contact with the edge
+    func contactedEdge()
+    {
+        perform(behavior: ReturnHomeGreepBehavior(ship: ship), forMilliseconds: 2000, withState: .AvoidingObstacle, postState: .Searching, postBehavior: DefaultGreepBahavior())
+    }
+    
+    // This function gets called when this greep comes in contact with the water
     func contactedWater(_ water: GKPolygonObstacle)
     {
 //         add obstacle to memory
@@ -37,33 +41,45 @@ extension Greep
         
     }
     
+    // This function gets called when this greep comes in contact with the ship
     func contactedShip()
     {
         
     }
     
-    func contactedTomato()
+    // This function gets called when this greep comes in contact with a tomato pile
+    func contactedTomato( _ pile: TomatoPile )
+    {
+        loadTomatoFromPile(pile)
+        updateBehaviorTo(ReturnHomeGreepBehavior(ship: ship))
+        // load tomato
+        // head home
+        // define next state
+        // define next behavior
+    }
+    
+    // This function gets called when this greep comes in contact with another greep
+    func contactedGreep( _ otherGreep: Greep )
+    {
+        shareInformationWith(otherGreep, postState: .Searching, postBehavior: DefaultGreepBahavior())
+//        print( "I, \(sprite?.physicsBody?.node?.name), contacted \(otherGreep.sprite?.physicsBody?.node?.name)")
+//        rotate(delta: 50)
+    }
+    
+    // This function gets called during shareInfromationWith
+    // This is where you define what will happen with the information
+    func exchangeInformationWith( _ otherGreep: Greep )
+    {
+        
+    }
+    
+    // This function gets called when another greep shares information with this greep
+    func postSharedWith()
     {
         
     }
     
     override func update(deltaTime seconds: TimeInterval) {
         super.update(deltaTime: seconds)
-        updateTimers(deltaTime: seconds)
-        switch state
-        {
-            case .Searching:
-                break
-            case .ReturningHome:
-                break
-            case .Waiting:
-                break
-            case .AvoidingObstacle:
-                break
-            case .GatheringInformation:
-                break
-                // user-defined cases:
-            
-        }
     }
 }

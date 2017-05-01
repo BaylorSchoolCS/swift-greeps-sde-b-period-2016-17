@@ -22,7 +22,7 @@ class MoveComponent: GKAgent2D
     {
         self.ship = ship
         super.init()
-        behavior = DefaultGreepBahaviour()
+        behavior = DefaultGreepBahavior()
         speed = Greep.defaultSpeed
         maxSpeed = Greep.defaultSpeed
         maxAcceleration = Greep.defaultSpeed

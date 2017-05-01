@@ -107,6 +107,19 @@ struct Memory
         return slots[i]
     }
     
+    func hasEmptySlot() -> Bool
+    {
+        for slot in slots
+        {
+            if slot == nil
+            {
+                return true
+            }
+        }
+        
+        return false
+    }
+    
     func allInfo() -> Set<Information>
     {
         let nonNilInfo = slots.filter({$0 != nil})

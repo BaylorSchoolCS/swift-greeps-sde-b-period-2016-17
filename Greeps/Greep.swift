@@ -12,16 +12,18 @@ import GameplayKit
 class Greep: GKEntity
 {
     let ship: Ship
-    static let defaultSpeed:Float = 40.0
+
+    static let defaultSpeed:Float = 80.0
     static let wanderAmount:Float = 10.0
-    var informationTimer: TimeInterval? = nil
-    var timer: TimeInterval? = nil
+    static let gatherInformationTime: DispatchTimeInterval = .milliseconds(5000)
+    static let shareInformationTime: DispatchTimeInterval = .milliseconds(1000)
+    
     var state: State = .Searching
     var nextState: State?
     var nextBehavior: GKBehavior?
     var pendingMemory: Information? // not allowed to use this variable
     var memory = Memory()
-    var number: UInt8 = 0
+    var number: UInt8 = 0// get rid.
     
     var speed: Float
     {
@@ -56,14 +58,7 @@ class Greep: GKEntity
         }
     }
     
-    var name: String
-    {
-        guard let sprite = component(ofType: GKSKNodeComponent.self) else { return "no name" }
-        
-        return sprite.node.name!
-    }
-    
-    init( ship: Ship, number: Int )
+    init( ship: Ship )
     {
         self.ship = ship
         super.init()
@@ -71,19 +66,16 @@ class Greep: GKEntity
         let shipPosition = ship.getPosition()
         let spriteComponent = GKSKNodeComponent(node: SKSpriteNode(imageNamed: "greep_green.png"))
         spriteComponent.node.setScale(0.05)
+        spriteComponent.node.entity = self
+        
         let sprite = spriteComponent.node as! SKSpriteNode
-        
         let physics = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
-        
         physics.categoryBitMask = PhysicsCategory.greep.rawValue
         physics.collisionBitMask = PhysicsCategory.water.rawValue | PhysicsCategory.boundary.rawValue
-        physics.contactTestBitMask =  (PhysicsCategory.tomato.rawValue | PhysicsCategory.water.rawValue) | (PhysicsCategory.ship.rawValue | PhysicsCategory.boundary.rawValue)
+        physics.contactTestBitMask = ( (PhysicsCategory.tomato.rawValue | PhysicsCategory.water.rawValue) | (PhysicsCategory.ship.rawValue | PhysicsCategory.greep.rawValue) ) | PhysicsCategory.boundary.rawValue
         physics.affectedByGravity = false
-
         spriteComponent.node.physicsBody = physics
         spriteComponent.node.position = shipPosition
-        physics.node!.name = "greep\(number)"
-        
         addComponent(spriteComponent)
         
         let mover = MoveComponent(ship: ship)
@@ -91,6 +83,7 @@ class Greep: GKEntity
         mover.position = float2( x: Float(shipPosition.x), y: Float(shipPosition.y))
         spriteComponent.node.zRotation = CGFloat(mover.rotation)
         addComponent(mover)
+        studentInitialization()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -123,6 +116,43 @@ class Greep: GKEntity
             spriteComponent.node.setScale(0.05)
     }
     
+    func perform( behavior newBehavior: GKBehavior, forMilliseconds ms: Int, withState newState: Greep.State, postState: Greep.State, postBehavior: GKBehavior )
+    {
+        if state != newState
+        {
+            state = newState
+            updateBehaviorTo(newBehavior)
+            GameViewController.delayQueue.asyncAfter(deadline: .now() + .milliseconds(ms)) {
+                self.state = postState
+                self.updateBehaviorTo(postBehavior)
+            }
+        }
+    }
+    
+    func storeTomatoLocationAbout( _ pile: TomatoPile, overwriteObstacle: Bool, overwriteOtherTomatoPile: Bool )
+    {
+        guard let info = Information(info: pile) else { fatalError("invalid information") }
+        if memory.hasEmptySlot()
+        {
+            memory.add( information: info )
+        }
+        else if overwriteObstacle || overwriteOtherTomatoPile
+        {
+            for i in 0...2
+            {
+                if let infoInSlot = memory.infoInSlot(i)
+                {
+                    if (infoInSlot.isObstacle && overwriteObstacle) || (infoInSlot.isTomato && overwriteOtherTomatoPile)
+                    {
+                        memory.add(information: info, toSlot: i)
+                        return
+                    }
+                }
+            }
+        }
+        
+    }
+    
     func gatherInformationAbout( obstacle: GKObstacle, postState: State, postBehavior: GKBehavior )
     {
         if state != .GatheringInformation
@@ -130,35 +160,50 @@ class Greep: GKEntity
             state = .GatheringInformation
             updateBehaviorTo(GatheringInformationBehavior())
             speed = 0
-            if informationTimer == nil
+            if let pendingInfo = Information(info: obstacle)
             {
-                informationTimer = 5 // fixed for now, would like it based on area of obstacle
-            }
-            nextState = postState
-            nextBehavior = postBehavior
-            print( "next: \(nextBehavior)")
-            pendingMemory = Information(info: obstacle)!
-        }
-        else
-        {
-            if informationTimer! <= 0
-            {
-                didFinishGatheringInformation()
+                GameViewController.delayQueue.asyncAfter(deadline: .now() + Greep.gatherInformationTime) {
+                    self.state = postState
+                    self.updateBehaviorTo(postBehavior)
+                    self.memory.add(information: pendingInfo )
+                    self.speed = Greep.defaultSpeed
+                }
             }
         }
     }
     
-    func didFinishGatheringInformation()
-    {
-        timerElapsed()
-        informationTimer = nil
-        speed = Greep.defaultSpeed
-        memory.add(information: pendingMemory! )
-    }
-    
-    func shareInformation(otherMemory: Set<Information>)
+    func didGatherInformation()
     {
         
+    }
+    
+    func willShareInformation()
+    {
+        if state != .SharingInformation
+        {
+            state = .SharingInformation
+            speed = 0
+        }
+    }
+    
+    func shareInformationWith( _ otherGreep: Greep, postState: State, postBehavior: GKBehavior )
+    {
+        willShareInformation()
+        otherGreep.willShareInformation()
+        GameViewController.delayQueue.asyncAfter(deadline: .now() + Greep.shareInformationTime) {
+            self.state = postState
+            self.updateBehaviorTo(postBehavior)
+            self.exchangeInformationWith( otherGreep )
+            self.speed = Greep.defaultSpeed
+            otherGreep.speed = Greep.defaultSpeed
+            otherGreep.postSharedWith()
+        }
+        
+    }
+    
+    func didShareInformation()
+    {
+
     }
     
     func updateBehaviorTo( _ newBehaviour: GKBehavior )
@@ -167,12 +212,12 @@ class Greep: GKEntity
         mover.behavior = newBehaviour
     }
     
-    func timerElapsed()
+    func changeToNextBehavior()
     {
         if nextState == nil
         {
             state = .Searching
-            updateBehaviorTo(DefaultGreepBahaviour())
+            updateBehaviorTo(DefaultGreepBahavior())
         }
         else
         {
@@ -180,39 +225,10 @@ class Greep: GKEntity
             nextState = nil
             if nextBehavior == nil
             {
-                nextBehavior = DefaultGreepBahaviour()
+                nextBehavior = DefaultGreepBahavior()
             }
-            print( "Doing: \(nextBehavior!)")
             updateBehaviorTo(nextBehavior!)
             nextBehavior = nil
-        }
-    }
-    
-    func updateTimers(deltaTime seconds: TimeInterval)
-    {
-        if informationTimer != nil
-        {
-            if informationTimer! > 0
-            {
-                informationTimer! -= seconds
-            }
-            else
-            {
-                didFinishGatheringInformation()
-            }
-        }
-        
-        if timer != nil
-        {
-            if timer! > 0
-            {
-                timer! -= seconds
-            }
-            else
-            {
-                timerElapsed()
-                timer = nil
-            }
         }
     }
 }
