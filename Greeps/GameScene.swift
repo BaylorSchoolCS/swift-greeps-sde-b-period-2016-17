@@ -54,9 +54,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
 
         self.scaleMode = .aspectFit
-        let framePhysicsLoop = SKPhysicsBody(edgeLoopFrom: self.frame)
-        framePhysicsLoop.categoryBitMask = PhysicsCategory.boundary.rawValue
-        self.physicsBody = framePhysicsLoop
+        let thinSize = self.frame.height * 0.01
+        let halfThinSize = thinSize/2
+        let topApron = SKPhysicsBody(rectangleOf: CGSize(width: self.frame.width, height: thinSize), center:CGPoint(x: self.frame.width/2, y: self.frame.height - halfThinSize))
+        let bottomApron = SKPhysicsBody(rectangleOf: CGSize(width: self.frame.width, height: thinSize), center:CGPoint(x: self.frame.width/2, y: halfThinSize))
+        
+        let leftApron = SKPhysicsBody(rectangleOf: CGSize(width: thinSize, height: self.frame.height), center: CGPoint(x:halfThinSize, y:self.frame.height/2))
+        let rightApron = SKPhysicsBody(rectangleOf: CGSize(width: thinSize, height: self.frame.height), center: CGPoint(x:self.frame.width - halfThinSize, y:self.frame.height/2))
+        
+        let apron = SKPhysicsBody(bodies: [topApron, bottomApron,leftApron,rightApron])
+//        let framePhysicsLoop = SKPhysicsBody(edgeLoopFrom: self.frame)
+        apron.categoryBitMask = PhysicsCategory.boundary.rawValue
+        apron.isDynamic = false
+        apron.isResting = true
+        apron.affectedByGravity = false
+        self.physicsBody = apron
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -137,13 +149,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if contact.bodyA.categoryBitMask == PhysicsCategory.greep.rawValue
         {
             let greep = contact.bodyA.node!.entity as! Greep
+
             switch contact.bodyB.categoryBitMask
             {
                 case PhysicsCategory.boundary.rawValue:
-                    greep.state = .AtEdge
-                    greep.speed = 0
-                    greep.behavior = WaitGreepBehavior()
-                    greep.contactedEdge()
+                    if greep.state != .AvoidingObstacle
+                    {
+                        greep.state = .AtEdge
+                        greep.speed = 0
+                        greep.behavior = WaitGreepBehavior()
+                        greep.contactedEdge()
+                    }
                 case PhysicsCategory.water.rawValue:
                     greep.speed = 0
                     greep.state = .AtWater
@@ -175,10 +191,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             switch contact.bodyA.categoryBitMask
             {
                 case PhysicsCategory.boundary.rawValue:
-                    greep.speed = 0
-                    greep.state = .AtEdge
-                    greep.behavior = WaitGreepBehavior()
-                    greep.contactedEdge()
+                    if greep.state != .AvoidingObstacle
+                    {
+                        greep.state = .AtEdge
+                        greep.speed = 0
+                        greep.behavior = WaitGreepBehavior()
+                        greep.contactedEdge()
+                    }
                 case PhysicsCategory.water.rawValue:
                     greep.speed = 0
                     greep.state = .AtWater
