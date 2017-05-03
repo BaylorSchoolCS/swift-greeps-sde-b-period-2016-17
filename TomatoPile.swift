@@ -27,16 +27,46 @@ class TomatoPile: GKEntity
         }
     }
     
-
+    
     private var tomatoCount: UInt8
+        {
+        didSet
+        {
+            count = Count.countForQuantity(tomatoCount)
+        }
+    }
+    
     private var previousCount: UInt8
     var agent = GKAgent2D()
     var count: Count
+        {
+        didSet
+        {
+            if count != oldValue
+            {
+                let newSprite = currentSprite()
+                sprite = newSprite
+            }
+        }
+    }
     
     var sprite: SKNode?
-    {
-        guard let sprite = component(ofType: GKSKNodeComponent.self) else { return nil }
-        return sprite.node
+        {
+        get {
+            guard let sprite = component(ofType: GKSKNodeComponent.self) else { return nil }
+            return sprite.node
+        }
+        set( newSprite )
+        {
+            guard let sprite = component(ofType: GKSKNodeComponent.self) else { fatalError("sprite not set yet") }
+            let physics = sprite.node.physicsBody
+            let scene = sprite.node.parent!
+            sprite.node.removeFromParent()
+            sprite.node = newSprite!
+            sprite.node.physicsBody = physics
+            sprite.node.position = CGPoint(x: CGFloat(agent.position.x), y: CGFloat(agent.position.y) )
+            scene.addChild(newSprite!)
+        }
     }
     
     convenience init( location: CGPoint )
@@ -51,12 +81,11 @@ class TomatoPile: GKEntity
         self.count = Count.countForQuantity(tomatoCount)
         super.init()
         
-        let spriteComponent = GKSKNodeComponent(node: SKSpriteNode(imageNamed: "tomatoPile-\(count)"))
+        let sprite = currentSprite()
+        let spriteComponent = GKSKNodeComponent(node: sprite)
         spriteComponent.node.entity = self
-        
         spriteComponent.node.setScale(CGFloat(0.25))
-        
-        let sprite = spriteComponent.node as! SKSpriteNode
+        spriteComponent.node.position = location
         
         let physics = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
         physics.categoryBitMask = PhysicsCategory.tomato.rawValue
@@ -64,13 +93,30 @@ class TomatoPile: GKEntity
         physics.isResting = true
         physics.affectedByGravity = false
         spriteComponent.node.physicsBody = physics
-        spriteComponent.node.position = location
+        
         
         addComponent(spriteComponent)
         
         agent.position = float2(x:Float(location.x), y: Float(location.y))
         
         addComponent(agent)
+    }
+    
+    func currentSprite() -> SKSpriteNode
+    {
+        let newSprite = SKSpriteNode(imageNamed: "tomatoPile-\(count)")
+        newSprite.entity = self
+        newSprite.setScale(CGFloat(0.25))
+        return newSprite
+    }
+    
+    func removeTomato()
+    {
+        print( "removing tomato #\(tomatoCount) @\(DispatchTime.now())")
+        if tomatoCount > 0
+        {
+            tomatoCount -= 1
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
