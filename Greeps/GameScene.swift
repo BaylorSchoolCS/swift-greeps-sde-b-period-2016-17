@@ -137,12 +137,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     {
         let pile = TomatoPile(location: location)
         addChild(pile.sprite!)
+        entities.append(pile)
     }
     
     func addTomatoPile(at location: CGPoint, ofSize count:UInt8 )
     {
         let pile = TomatoPile(location: location, count: count)
         addChild(pile.sprite!)
+        entities.append(pile)
     }
     
     func didBegin(_ contact: SKPhysicsContact) {

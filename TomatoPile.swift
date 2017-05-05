@@ -26,20 +26,9 @@ class TomatoPile: GKEntity
             }
         }
     }
-    
-    
-    private var tomatoCount: UInt8
-        {
-        didSet
-        {
-            count = Count.countForQuantity(tomatoCount)
-        }
-    }
-    
-    private var previousCount: UInt8
-    var agent = GKAgent2D()
+
     var count: Count
-        {
+    {
         didSet
         {
             if count != oldValue
@@ -50,55 +39,62 @@ class TomatoPile: GKEntity
         }
     }
     
-    var sprite: SKNode?
+    private var tomatoCount: UInt8
+    {
+        didSet
         {
+            count = Count.countForQuantity(tomatoCount)
+        }
+    }
+    
+    var sprite: SKNode?
+    {
         get {
-            guard let sprite = component(ofType: GKSKNodeComponent.self) else { return nil }
-            return sprite.node
+            guard let spriteComponent = component(ofType: GKSKNodeComponent.self) else { return nil }
+            return spriteComponent.node
         }
         set( newSprite )
         {
-            guard let sprite = component(ofType: GKSKNodeComponent.self) else { fatalError("sprite not set yet") }
-            let physics = sprite.node.physicsBody
-            let scene = sprite.node.parent!
-            sprite.node.removeFromParent()
-            sprite.node = newSprite!
-            sprite.node.physicsBody = physics
-            sprite.node.position = CGPoint(x: CGFloat(agent.position.x), y: CGFloat(agent.position.y) )
+            guard let spriteComponent = component(ofType: GKSKNodeComponent.self) else { fatalError("sprite not set yet") }
+            let physics = spriteComponent.node.physicsBody
+            newSprite!.physicsBody = physics
+            newSprite!.position = CGPoint(x: CGFloat(agent.position.x), y: CGFloat(agent.position.y) )
+
+            let scene = spriteComponent.node.parent!
+            spriteComponent.node.removeFromParent()
+            
+            spriteComponent.node = newSprite!
             scene.addChild(newSprite!)
         }
     }
     
+    var agent = GKAgent2D()
+    
     convenience init( location: CGPoint )
     {
-        self.init( location: location, count: UInt8( 1 + arc4random() % 40 ) )
+        self.init( location: location, count: UInt8( 4 + arc4random() % 36 ) )
     }
     
     init( location: CGPoint, count qty: UInt8 )
     {
         tomatoCount = qty
-        previousCount = qty
         self.count = Count.countForQuantity(tomatoCount)
         super.init()
         
         let sprite = currentSprite()
         let spriteComponent = GKSKNodeComponent(node: sprite)
-        spriteComponent.node.entity = self
-        spriteComponent.node.setScale(CGFloat(0.25))
-        spriteComponent.node.position = location
         
         let physics = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
         physics.categoryBitMask = PhysicsCategory.tomato.rawValue
         physics.isDynamic = false
         physics.isResting = true
         physics.affectedByGravity = false
+        
         spriteComponent.node.physicsBody = physics
-        
-        
+        spriteComponent.node.position = location
         addComponent(spriteComponent)
         
         agent.position = float2(x:Float(location.x), y: Float(location.y))
-        
         addComponent(agent)
     }
     
@@ -112,7 +108,6 @@ class TomatoPile: GKEntity
     
     func removeTomato()
     {
-        print( "removing tomato #\(tomatoCount) @\(DispatchTime.now())")
         if tomatoCount > 0
         {
             tomatoCount -= 1
