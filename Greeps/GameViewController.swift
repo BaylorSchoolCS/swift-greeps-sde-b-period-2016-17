@@ -12,40 +12,70 @@ import GameplayKit
 
 class GameViewController: UIViewController {
     static let delayQueue = DispatchQueue(label: "org.baylorschool.cs.greeps.delayqueue")
+    var sceneCounter = 0
+    let mapDataLocation = Bundle.main.url(forResource: "example", withExtension: "json")
+    var maps:[[String:Any]]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        do {
+            let data = try Data(contentsOf: mapDataLocation!)
+            if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+            {
+                maps = json["maps"] as? [[String:Any]]
+            }
+        } catch {
+            print( "Error with JSON \(error)")
+        }
+        
+        loadCurrentScene()
+    }
+    
+    func loadCurrentScene()
+    {
         // Load 'GameScene.sks' as a GKScene. This provides gameplay related content
         // including entities and graphs.
-        if let scene = GKScene(fileNamed: "GameScene") {
+        if let scene = GKScene(fileNamed: "GameScene"),
+            let sceneJSON = maps?[sceneCounter],
+            let sceneNode = scene.rootNode as! GameScene?
+        {
+            // Copy gameplay related content over to the scene
+            sceneNode.entities = scene.entities
+            sceneNode.graphs = scene.graphs
             
-            // Get the SKScene from the loaded GKScene
-            if let sceneNode = scene.rootNode as! GameScene? {
-                // Copy gameplay related content over to the scene
-                sceneNode.entities = scene.entities
-                sceneNode.graphs = scene.graphs
+            // Set the scale mode to scale to fit the window
+            sceneNode.scaleMode = .aspectFill
+            // all of this comes from a json file representing the levels?
+            
+            sceneNode.addShip(at: CGPoint(x:sceneJSON["shipX"] as! Int,y:sceneJSON["shipY"] as! Int), withGreepCount: 10)
+            let obstacles = sceneJSON["obstacles"] as! [[String:Any]]
+            for obstacle in obstacles
+            {
+                let type = obstacle["type"] as! Int
+                let location = CGPoint( x:obstacle["x"] as! Int, y:obstacle["y"] as! Int )
+                let scale = obstacle["scale"] as! Float
+                let rotation = obstacle["rotation"] as! Float
+                sceneNode.addWater( ofType: "water\(type)", at: location, scaledBy:scale, rotatedBy: rotation)
+            }
+            let tomatoes = sceneJSON["tomatoes"] as! [[String:Any]]
+            for tomato in tomatoes
+            {
+                let location = CGPoint( x:tomato["x"] as! Int, y:tomato["y"] as! Int )
+                let count = tomato["count"] as! Int
+                sceneNode.addTomatoPile(at: location, ofSize: UInt8(count) )
+            }
+            
+            sceneNode.addScore()
+            // Present the scene
+            if let view = self.view as! SKView? {
+                view.presentScene(sceneNode)
                 
-                // Set the scale mode to scale to fit the window
-                sceneNode.scaleMode = .aspectFill
-                // all of this comes from a json file representing the levels?
-                sceneNode.addChild(sceneNode.water)
-                sceneNode.addShip(at: CGPoint(x:300,y:500), withGreepCount: 10)
-                sceneNode.addWater( ofType: "water1", at: CGPoint(x:800,y:200), scaledBy:0.2, rotatedBy: 50)
-                sceneNode.addTomatoPile(at: CGPoint( x:500, y:500))//, ofSize: 8 )
-                sceneNode.addScore()
-                // Present the scene
-                if let view = self.view as! SKView? {
-                    view.presentScene(sceneNode)
-                    
-                    view.ignoresSiblingOrder = true
-                    
-                    view.showsFPS = false
-                    view.showsNodeCount = false
-                    view.showsPhysics = true
-                }
+                view.ignoresSiblingOrder = true
                 
-                
+                view.showsFPS = false
+                view.showsNodeCount = false
+                view.showsPhysics = true
             }
         }
     }

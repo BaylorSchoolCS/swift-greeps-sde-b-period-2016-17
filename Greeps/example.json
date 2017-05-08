@@ -1,19 +1,58 @@
 {
-    "maps": [
+    "maps": [{
+             "map": 1,
+             "shipX": 300,
+             "shipY": 500,
+             "obstacles": [{
+                           "x": 800,
+                           "y": 200,
+                           "scale": 0.2,
+                           "rotation": 160,
+                           "type": 1
+                           }],
+             "tomatoes": [{
+                          "x": 500,
+                          "y": 500,
+                          "count": 16
+                          },
+                          {
+                          "x": 100,
+                          "y": 100,
+                          "count": 16
+                          },
+                          {
+                          "x": 1000,
+                          "y": 1000,
+                          "count": 16
+                          },
+                          {
+                          "x": 300,
+                          "y": 200,
+                          "count": 16
+                          }
+                          
+                          ]
+             },
              {
-             "map" : 1,
-             "shipX" : 300,
-             "shipY":  1600,
-             "obstacles": [
+             "map": 2,
+             "shipX": 300,
+             "shipY": 1600,
+             "obstacles": [{
+                           "x": 800,
+                           "y": 200,
+                           "scale": 0.2,
+                           "rotation": 160,
+                           "type": 1
+                           },
                            {
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
                            }
-                           ]
-             "tomatoes": [
-                          {
+                           ],
+             "tomatoes": [{
                           "x": 900,
                           "y": 100,
                           "count": 16
@@ -33,29 +72,20 @@
                           "y": 200,
                           "count": 16
                           }
-
                           ]
              },
              {
-             "map" : 2,
-             "shipX" : 300,
-             "shipY":  1600,
-             "obstacles": [
-                           {
+             "map": 3,
+             "shipX": 300,
+             "shipY": 1600,
+             "obstacles": [{
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
-                           },
-                           {
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160
-                           }
-                           ]
-             "tomatoes": [
-                          {
+                           "rotation": 160,
+                           "type": 1
+                           }],
+             "tomatoes": [{
                           "x": 900,
                           "y": 100,
                           "count": 16
@@ -75,22 +105,29 @@
                           "y": 200,
                           "count": 16
                           }
+                          
                           ]
              },
              {
-             "map" : 3,
-             "shipX" : 300,
-             "shipY":  1600,
-             "obstacles": [
+             "map": 4,
+             "shipX": 300,
+             "shipY": 1600,
+             "obstacles": [{
+                           "x": 800,
+                           "y": 200,
+                           "scale": 0.2,
+                           "rotation": 160,
+                           "type": 1
+                           },
                            {
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
                            }
-                           ]
-             "tomatoes": [
-                          {
+                           ],
+             "tomatoes": [{
                           "x": 900,
                           "y": 100,
                           "count": 16
@@ -110,136 +147,43 @@
                           "y": 200,
                           "count": 16
                           }
-
+                          
                           ]
              },
              {
-             "map" : 4,
-             "shipX" : 300,
-             "shipY":  1600,
-             "obstacles": [
-                           {
+             "map": 16,
+             "shipX": 300,
+             "shipY": 1600,
+             "obstacles": [{
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
                            },
                            {
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
+                           },
+                           {
+                           "x": 800,
+                           "y": 200,
+                           "scale": 0.2,
+                           "rotation": 160,
+                           "type": 1
+                           },
+                           {
+                           "x": 800,
+                           "y": 200,
+                           "scale": 0.2,
+                           "rotation": 160,
+                           "type": 1
                            }
-                           ]
-             "tomatoes": [
-                          {
-                          "x": 900,
-                          "y": 100,
-                          "count": 16
-                          },
-                          {
-                          "x": 800,
-                          "y": 200,
-                          "count": 16
-                          },
-                          {
-                          "x": 800,
-                          "y": 200,
-                          "count": 16
-                          },
-                          {
-                          "x": 800,
-                          "y": 200,
-                          "count": 16
-                          }
-
-                          ]
-             },
-             {
-             "map" : 16,
-             "shipX" : 300,
-             "shipY":  1600,
-             "obstacles": [
-                           {
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160
-                           },
-                           {
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160
-                           },
-                           {
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160
-                           },
-                           {
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160
-                           }
-                           ]
-             "tomatoes": [
-                          {
-                          "x": 900,
-                          "y": 100,
-                          "count": 16
-                          },
-                          {
-                          "x": 800,
-                          "y": 200,
-                          "count": 16
-                          },
-                          {
-                          "x": 800,
-                          "y": 200,
-                          "count": 16
-                          },
-                          {
-                          "x": 800,
-                          "y": 200,
-                          "count": 16
-                          },
-                          {
-                          "x": 800,
-                          "y": 200,
-                          "count": 16
-                          }
-
-                          ]
-             },
-             {
-             "map" : 6,
-             "shipX" : 300,
-             "shipY":  1600,
-             "obstacles": [
-                           {
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160
-                           },
-                           {
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160
-                           },
-                           {
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160
-                           }
-                           ]
-             "tomatoes": [
-                          {
+                           ],
+             "tomatoes": [{
                           "x": 900,
                           "y": 100,
                           "count": 16
@@ -264,41 +208,97 @@
                           "y": 200,
                           "count": 16
                           }
-
+                          
                           ]
              },
              {
-             "map" : 7,
-             "shipX" : 300,
-             "shipY":  1600,
-             "obstacles": [
-                           {
+             "map": 6,
+             "shipX": 300,
+             "shipY": 1600,
+             "obstacles": [{
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
                            },
                            {
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
                            },
                            {
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
-                           },
-                           {
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
                            }
-                           ]
-             "tomatoes": [
+                           ],
+             "tomatoes": [{
+                          "x": 900,
+                          "y": 100,
+                          "count": 16
+                          },
                           {
+                          "x": 800,
+                          "y": 200,
+                          "count": 16
+                          },
+                          {
+                          "x": 800,
+                          "y": 200,
+                          "count": 16
+                          },
+                          {
+                          "x": 800,
+                          "y": 200,
+                          "count": 16
+                          },
+                          {
+                          "x": 800,
+                          "y": 200,
+                          "count": 16
+                          }
+                          
+                          ]
+             },
+             {
+             "map": 7,
+             "shipX": 300,
+             "shipY": 1600,
+             "obstacles": [{
+                           "x": 800,
+                           "y": 200,
+                           "scale": 0.2,
+                           "rotation": 160,
+                           "type": 1
+                           },
+                           {
+                           "x": 800,
+                           "y": 200,
+                           "scale": 0.2,
+                           "rotation": 160,
+                           "type": 1
+                           },
+                           {
+                           "x": 800,
+                           "y": 200,
+                           "scale": 0.2,
+                           "rotation": 160,
+                           "type": 1
+                           },
+                           {
+                           "x": 800,
+                           "y": 200,
+                           "scale": 0.2,
+                           "rotation": 160,
+                           "type": 1
+                           }
+                           ],
+             "tomatoes": [{
                           "x": 900,
                           "y": 100,
                           "count": 16
@@ -318,95 +318,106 @@
                           "y": 200,
                           "count": 16
                           }
-
+                          
                           ]
              },
              {
-             "map" : 8,
-             "shipX" : 300,
-             "shipY":  1600,
-             "obstacles": [
-                           {
+             "map": 8,
+             "shipX": 300,
+             "shipY": 1600,
+             "obstacles": [{
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
                            },
                            {
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
                            },
                            {
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
                            },
                            {
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
                            },
                            {
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
                            },
                            {
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
                            },
                            {
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
                            },
                            {
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
                            },
                            {
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
                            },
                            {
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
                            },
                            {
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
                            },
                            {
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
                            },
                            {
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
                            }
-                           ]
-             "tomatoes": [
-                          {
+                           ],
+             "tomatoes": [{
                           "x": 900,
                           "y": 100,
                           "count": 16
@@ -424,19 +435,17 @@
                           ]
              },
              {
-             "map" : 9,
-             "shipX" : 300,
-             "shipY":  1600,
-             "obstacles": [
-                           {
+             "map": 9,
+             "shipX": 300,
+             "shipY": 1600,
+             "obstacles": [{
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
-                           }
-                           ]
-             "tomatoes": [
-                          {
+                           "rotation": 160,
+                           "type": 1
+                           }],
+             "tomatoes": [{
                           "x": 900,
                           "y": 100,
                           "count": 16
@@ -459,25 +468,25 @@
                           ]
              },
              {
-             "map" : 10,
-             "shipX" : 300,
-             "shipY":  1600,
-             "obstacles": [
-                           {
+             "map": 10,
+             "shipX": 300,
+             "shipY": 1600,
+             "obstacles": [{
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
                            },
                            {
                            "x": 800,
                            "y": 200,
                            "scale": 0.2,
-                           "rotation": 160
+                           "rotation": 160,
+                           "type": 1
                            }
-                           ]
-             "tomatoes": [
-                          {
+                           ],
+             "tomatoes": [{
                           "x": 900,
                           "y": 100,
                           "count": 16

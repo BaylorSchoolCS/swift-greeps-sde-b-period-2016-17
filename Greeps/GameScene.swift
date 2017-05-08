@@ -120,6 +120,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func addWater( ofType fileName: String, at location: CGPoint, scaledBy scale:Float, rotatedBy rotation: Float)
     {
+        if water.parent == nil
+        {
+            addChild(water)
+        }
         let texture = SKTexture(imageNamed: "\(fileName).png")
         let sprite = SKSpriteNode(texture: texture)
         sprite.setScale(CGFloat(scale))
