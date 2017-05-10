@@ -15,6 +15,7 @@ class GameViewController: UIViewController {
     var sceneCounter = 0
     let mapDataLocation = Bundle.main.url(forResource: "example", withExtension: "json")
     var maps:[[String:Any]]?
+    let sceneLength = 20000 // in ms
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +33,7 @@ class GameViewController: UIViewController {
         
         for i in 0..<10
         {
-            GameViewController.delayQueue.asyncAfter(deadline: .now() + .milliseconds(10000*i)) {
+            GameViewController.delayQueue.asyncAfter(deadline: .now() + .milliseconds(sceneLength * i) ){
                 self.loadCurrentScene()
                 self.sceneCounter += 1
             }

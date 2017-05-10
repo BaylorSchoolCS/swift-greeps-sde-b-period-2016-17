@@ -125,24 +125,43 @@ class Greep: GKEntity
         mover.rotation += delta
     }
     
+    private func updateSprite()
+    {
+        let newSprite = isCarryingTomato ? SKSpriteNode(imageNamed: "greep_green_tomato.png") : SKSpriteNode(imageNamed: "greep_green.png")
+        newSprite.setScale(0.05)
+        newSprite.entity = self
+        let physics = sprite.physicsBody
+        newSprite.physicsBody = physics
+        newSprite.position = sprite.position
+        
+        let scene = sprite.parent
+        sprite.removeFromParent()
+        
+        sprite = newSprite
+        scene?.addChild(sprite)
+        
+    }
+    
     func loadTomatoFromPile( _ pile: TomatoPile )
     {
-        
+        if !isCarryingTomato && pile.removeTomato()
+        {
+            print( "loaded tomato")
+            isCarryingTomato = true
+            updateSprite()
+        }
     }
     
     func unloadTomatoPile( )
     {
-        if( isCarryingTomato )
+        if isCarryingTomato
         {
             isCarryingTomato = false
             ship.addTomato()
             speed = 0
             state = .Waiting
             behavior = WaitGreepBehavior()
-            let newSprite = SKSpriteNode(imageNamed: "greep_green.png")
-            newSprite.setScale(0.05)
-            sprite = newSprite
-            sprite.entity = self
+            updateSprite()
             postUnloadTomato()
         }
     }

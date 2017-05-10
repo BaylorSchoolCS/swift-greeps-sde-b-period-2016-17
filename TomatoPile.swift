@@ -106,11 +106,16 @@ class TomatoPile: GKEntity
         return newSprite
     }
     
-    func removeTomato()
+    func removeTomato() -> Bool
     {
         if tomatoCount > 0
         {
             tomatoCount -= 1
+            return true
+        }
+        else
+        {
+            return false
         }
     }
     
