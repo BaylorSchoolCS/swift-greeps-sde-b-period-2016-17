@@ -146,7 +146,6 @@ class Greep: GKEntity
     {
         if !isCarryingTomato && pile.removeTomato()
         {
-            print( "loaded tomato")
             isCarryingTomato = true
             updateSprite()
         }
