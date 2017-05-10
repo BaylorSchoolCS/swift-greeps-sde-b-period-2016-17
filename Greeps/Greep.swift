@@ -132,15 +132,19 @@ class Greep: GKEntity
     
     func unloadTomatoPile( )
     {
-        isCarryingTomato = false
-        ship.addTomato()
-        speed = 0
-        state = .Waiting
-        behavior = WaitGreepBehavior()
-        let newSprite = SKSpriteNode(imageNamed: "greep_green.png")
-        newSprite.setScale(0.05)
-        sprite = newSprite
-        postUnloadTomato()
+        if( isCarryingTomato )
+        {
+            isCarryingTomato = false
+            ship.addTomato()
+            speed = 0
+            state = .Waiting
+            behavior = WaitGreepBehavior()
+            let newSprite = SKSpriteNode(imageNamed: "greep_green.png")
+            newSprite.setScale(0.05)
+            sprite = newSprite
+            sprite.entity = self
+            postUnloadTomato()
+        }
     }
     
     func perform( behavior newBehavior: GKBehavior, forMilliseconds ms: Int, withState newState: Greep.State, postState: Greep.State, postBehavior: GKBehavior )

@@ -29,7 +29,14 @@ class GameViewController: UIViewController {
             print( "Error with JSON \(error)")
         }
         
-        loadCurrentScene()
+        
+        for i in 0..<10
+        {
+            GameViewController.delayQueue.asyncAfter(deadline: .now() + .milliseconds(10000*i)) {
+                self.loadCurrentScene()
+                self.sceneCounter += 1
+            }
+        }
     }
     
     func loadCurrentScene()

@@ -35,9 +35,15 @@ class Ship: GKEntity
     {
         self.scene = scene
         super.init()
-        let sprite = SpriteComponent(texture: SKTexture(imageNamed: "ship.png"))
-        sprite.node.physicsBody?.categoryBitMask = PhysicsCategory.ship.rawValue
-        addComponent(sprite)
+        let texture = SKTexture(imageNamed: "ship.png")
+        let spriteComponent = SpriteComponent(texture: texture)
+        spriteComponent.node.entity = self
+        let physics = SKPhysicsBody(texture: texture, size: texture.size())
+        physics.categoryBitMask = PhysicsCategory.ship.rawValue
+        physics.affectedByGravity = false
+        physics.isDynamic = false
+        spriteComponent.node.physicsBody = physics
+        addComponent(spriteComponent)
         addComponent( GKAgent2D() )
     }
     
