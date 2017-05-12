@@ -87,3 +87,13 @@ class GoAroundWaterBehavior: GKBehavior
         setWeight(10.0, for: GKGoal(toSeparateFrom: [water], maxDistance: 20, maxAngle: 0))
     }
 }
+
+class MoveToPile: GKBehavior
+{
+    init(tomatoPile: GKAgent)
+    {
+        super.init()
+//        setWeight(1.0, for: GKGoal( toWander: Greep.wanderAmount ))
+        setWeight(10.0, for: GKGoal(toSeekAgent: tomatoPile))
+    }
+}

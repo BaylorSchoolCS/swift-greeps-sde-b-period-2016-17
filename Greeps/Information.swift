@@ -12,6 +12,7 @@ import GameplayKit
 class Information: Hashable
 {
     let info: Any
+    let lastKnownCount: TomatoPile.Count?
     let isTomato: Bool
     let isObstacle: Bool
     
@@ -32,12 +33,14 @@ class Information: Hashable
         if let obstacle = info as? GKObstacle
         {
             self.info = obstacle
+            self.lastKnownCount = nil
             isTomato = false
             isObstacle = true
         }
-        else if let tomato = info as? GKEntity
+        else if let tomato = info as? TomatoPile
         {
-            self.info = tomato
+            self.info = tomato.agent
+            self.lastKnownCount = tomato.count
             isTomato = true
             isObstacle = false
         }
@@ -56,7 +59,7 @@ extension Information: Equatable
         {
             if lhs.isTomato
             {
-                return (lhs.info as! GKEntity) == (rhs.info as! GKEntity)
+                return (lhs.info as! GKAgent) == (rhs.info as! GKAgent) && lhs.lastKnownCount == rhs.lastKnownCount 
             }
             else
             {

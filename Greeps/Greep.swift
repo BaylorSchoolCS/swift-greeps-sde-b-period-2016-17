@@ -240,18 +240,20 @@ class Greep: GKEntity
     
     func shareInformationWith( _ otherGreep: Greep, postState: State? = nil, postBehavior: GKBehavior? = nil)
     {
-        let (previousState, previousBehavior) = willShareInformation()
-        let (otherGreepPreviousState, otherGreepPreviousBehavior) = otherGreep.willShareInformation()
-        GameViewController.delayQueue.asyncAfter(deadline: .now() + Greep.shareInformationTime) {
-            self.state = postState == nil ? previousState : postState!
-            self.behavior = postBehavior == nil ? previousBehavior : postBehavior!
-            self.exchangeInformationWith( otherGreep )
-            self.speed = (self.state == .AtWater || self.state == .AtEdge ) ? 0 : Greep.defaultSpeed  
-            otherGreep.state = otherGreepPreviousState
-            otherGreep.speed = (otherGreep.state == .AtWater || otherGreep.state == .AtEdge ) ? 0 : Greep.defaultSpeed
-            otherGreep.behavior = otherGreepPreviousBehavior
-            otherGreep.postSharedWith()
-        }
-        
+        if state != .SharingInformation
+        {
+            let (previousState, previousBehavior) = willShareInformation()
+            let (otherGreepPreviousState, otherGreepPreviousBehavior) = otherGreep.willShareInformation()
+            GameViewController.delayQueue.asyncAfter(deadline: .now() + Greep.shareInformationTime) {
+                self.state = postState == nil ? previousState : postState!
+                self.behavior = postBehavior == nil ? previousBehavior : postBehavior!
+                self.exchangeInformationWith( otherGreep )
+                self.speed = (self.state == .AtWater || self.state == .AtEdge ) ? 0 : Greep.defaultSpeed  
+                otherGreep.state = otherGreepPreviousState
+                otherGreep.speed = (otherGreep.state == .AtWater || otherGreep.state == .AtEdge ) ? 0 : Greep.defaultSpeed
+                otherGreep.behavior = otherGreepPreviousBehavior
+                otherGreep.postSharedWith()
+            }
+        }        
     }
 }
