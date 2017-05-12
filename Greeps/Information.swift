@@ -24,7 +24,7 @@ class Information: Hashable
         }
         else
         {
-            return (info as! GKEntity).hashValue
+            return (info as! GKAgent).hashValue
         }
     }
     
@@ -59,7 +59,7 @@ extension Information: Equatable
         {
             if lhs.isTomato
             {
-                return (lhs.info as! GKAgent) == (rhs.info as! GKAgent) && lhs.lastKnownCount == rhs.lastKnownCount 
+                return (lhs.info as! GKAgent) == (rhs.info as! GKAgent) && lhs.lastKnownCount == rhs.lastKnownCount
             }
             else
             {
