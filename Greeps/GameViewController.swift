@@ -16,6 +16,7 @@ class GameViewController: UIViewController {
     let mapDataLocation = Bundle.main.url(forResource: "example", withExtension: "json")
     var maps:[[String:Any]]?
     let sceneLength = 20000 // in ms
+    var totalScoreCounter = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +35,7 @@ class GameViewController: UIViewController {
         for i in 0..<10
         {
             GameViewController.delayQueue.asyncAfter(deadline: .now() + .milliseconds(sceneLength * i) ){
+                self.updateTotalScore()
                 self.loadCurrentScene()
                 self.sceneCounter += 1
             }
@@ -87,7 +89,14 @@ class GameViewController: UIViewController {
             }
         }
     }
-    
+    func updateTotalScore()
+    {
+        if let view = self.view as! SKView?, let scene = view.scene as! GameScene?
+        {
+            totalScoreCounter += scene.count
+            print( "\(scene.count) added. New total: \(totalScoreCounter)" )
+        }
+    }
     override var shouldAutorotate: Bool {
         return true
     }
