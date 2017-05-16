@@ -94,7 +94,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             entity.update(deltaTime: dt)
         }
-        
+        scoreLabel.text = "\(count)"
         self.lastUpdateTime = currentTime
     }
     func addScore()

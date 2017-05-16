@@ -24,7 +24,7 @@ class Information: Hashable
         }
         else
         {
-            return (info as! GKEntity).hashValue
+            return (info as! GKAgent).hashValue
         }
     }
     

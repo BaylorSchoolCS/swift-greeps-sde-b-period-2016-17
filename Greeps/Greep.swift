@@ -157,6 +157,7 @@ class Greep: GKEntity
         {
             isCarryingTomato = false
             ship.addTomato()
+            print ("I attempted to add a tomato")
             speed = 0
             state = .Waiting
             behavior = WaitGreepBehavior()
