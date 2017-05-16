@@ -91,7 +91,8 @@ class Greep: GKEntity
         spriteComponent.node.entity = self
         
         let sprite = spriteComponent.node as! SKSpriteNode
-        let physics = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
+        let physics = SKPhysicsBody(circleOfRadius: sprite.size.width/2)
+        //let physics = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
         physics.categoryBitMask = PhysicsCategory.greep.rawValue
         physics.collisionBitMask = PhysicsCategory.water.rawValue | PhysicsCategory.boundary.rawValue
         physics.contactTestBitMask = ( (PhysicsCategory.tomato.rawValue | PhysicsCategory.water.rawValue) | (PhysicsCategory.ship.rawValue | PhysicsCategory.greep.rawValue) ) | PhysicsCategory.boundary.rawValue
@@ -181,7 +182,22 @@ class Greep: GKEntity
     func storeTomatoLocationAbout( _ pile: TomatoPile, overwriteObstacle: Bool, overwriteOtherTomatoPile: Bool )
     {
         guard let info = Information(info: pile) else { fatalError("invalid information") }
-        if memory.hasEmptySlot()
+        
+        if memory.contains( information: info )
+        {
+            for i in 0...2
+            {
+                if let infoInSlot = memory.infoInSlot(i)
+                {
+                    if infoInSlot.lastKnownCount != info.lastKnownCount
+                    {
+                        memory.add(information: info, toSlot: i)
+                        return
+                    }
+                }
+            }
+        }
+        else if memory.hasEmptySlot()
         {
             memory.add( information: info )
         }

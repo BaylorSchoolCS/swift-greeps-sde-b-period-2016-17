@@ -55,21 +55,8 @@ extension Information: Equatable
 {
     static func ==(lhs: Information, rhs: Information) -> Bool
     {
-        if((lhs.isTomato && rhs.isTomato) || (lhs.isObstacle && rhs.isObstacle))
-        {
-            if lhs.isTomato
-            {
-                return (lhs.info as! GKAgent) == (rhs.info as! GKAgent) && lhs.lastKnownCount == rhs.lastKnownCount
-            }
-            else
-            {
-                return (lhs.info as! GKObstacle) == (rhs.info as! GKObstacle)
-            }
-        }
-        else
-        {
-            return false
-        }
+        return ((lhs.isTomato && rhs.isTomato) && (lhs.info as! GKAgent == rhs.info as! GKAgent)) ||
+            ((lhs.isObstacle && rhs.isObstacle) && (lhs.info as! GKObstacle == rhs.info as! GKObstacle))
     }
 }
 

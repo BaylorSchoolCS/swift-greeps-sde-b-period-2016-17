@@ -84,7 +84,8 @@ class TomatoPile: GKEntity
         let sprite = currentSprite()
         let spriteComponent = GKSKNodeComponent(node: sprite)
         
-        let physics = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
+        let physics = SKPhysicsBody(circleOfRadius: sprite.size.width/2)
+//        let physics = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
         physics.categoryBitMask = PhysicsCategory.tomato.rawValue
         physics.isDynamic = false
         physics.isResting = true
