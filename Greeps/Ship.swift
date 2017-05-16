@@ -75,6 +75,6 @@ class Ship: GKEntity
     func addTomato()
     {
         scene.count += 1
-        print ("I returned a tomato")
+        //print ("I returned a tomato")
     }
 }

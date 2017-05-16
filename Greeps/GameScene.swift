@@ -99,11 +99,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     func addScore()
     {
-        scoreLabel = SKLabelNode(fontNamed: "ScoreLabel")
+        scoreLabel = SKLabelNode(fontNamed: "Papyrus")
         scoreLabel.name = scoreLabelName
         scoreLabel.fontSize = 50
         scoreLabel.fontColor = SKColor.white
-        scoreLabel.text = "\(count)"
+        scoreLabel.text = " \(count)"
         scoreLabel.position = CGPoint(x:frame.size.width / 20, y:frame.size.height - frame.size.height / 14)
         self.addChild(scoreLabel)
     }
