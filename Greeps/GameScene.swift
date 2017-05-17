@@ -13,13 +13,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var entities = [GKEntity]()
     var graphs = [String : GKGraph]()
-    
+    var gvc: GameViewController?
     var ship: Ship?
     var water = SKNode()
     var obstacles = Dictionary<SKNode,GKPolygonObstacle>()
     var count = 0
     var scoreLabel = SKLabelNode()
     let scoreLabelName = "scoreLabel"
+    var totalScoreLabel = SKLabelNode()
+    let totalScoreLabelName = "totalScoreLabel"
     
     private var lastUpdateTime : TimeInterval = 0
     
@@ -94,18 +96,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             entity.update(deltaTime: dt)
         }
-        
+        scoreLabel.text = "Level Score: " + "\(count)"
+        totalScoreLabel.text = "Total Score: " + "\(String(describing: gvc!.totalScoreCounter))"
         self.lastUpdateTime = currentTime
     }
     func addScore()
     {
-        scoreLabel = SKLabelNode(fontNamed: "ScoreLabel")
+        scoreLabel = SKLabelNode(fontNamed: "Papyrus")
         scoreLabel.name = scoreLabelName
-        scoreLabel.fontSize = 50
+        scoreLabel.fontSize = 40
         scoreLabel.fontColor = SKColor.white
-        scoreLabel.text = "\(count)"
-        scoreLabel.position = CGPoint(x:frame.size.width / 20, y:frame.size.height - frame.size.height / 14)
+        scoreLabel.text = "Level Score: " + " \(count)"
+        scoreLabel.position = CGPoint(x:frame.size.width / 8, y:frame.size.height - frame.size.height / 14)
         self.addChild(scoreLabel)
+        totalScoreLabel = SKLabelNode(fontNamed: "Papyrus")
+        totalScoreLabel.name = totalScoreLabelName
+        totalScoreLabel.fontSize = 40
+        totalScoreLabel.fontColor = SKColor.white
+        totalScoreLabel.text = "Total Score: " + "\(String(describing: gvc!.totalScoreCounter))"
+        totalScoreLabel.position = CGPoint(x:frame.size.width / 8, y:frame.size.height - frame.size.height / 7)
+        self.addChild(totalScoreLabel)
     }
     
     func addShip( at location: CGPoint, withGreepCount numberOfGreeps:Int )

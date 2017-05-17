@@ -13,7 +13,7 @@ extension Greep
 {
     enum State
     {
-        case Searching, AtEdge, AtWater, ReturningHome, Waiting, AvoidingObstacle, GatheringInformation, SharingInformation
+        case Searching, AtEdge, AtWater, ReturningHome, Waiting, AvoidingObstacle, GatheringInformation, SharingInformation, ReturningToPile
         //add in up to four more states
     }
     
@@ -51,6 +51,10 @@ extension Greep
     func contactedTomato( _ pile: TomatoPile )
     {
         loadTomatoFromPile(pile)
+        if memory.hasEmptySlot(), let info = Information(info: pile)
+        {
+            memory.add(information: info)
+        }
         behavior = ReturnHomeGreepBehavior(ship: ship)
         // load tomato
         // head home
@@ -82,7 +86,15 @@ extension Greep
     // This function gets called after the tomato has been unloaded at the ship
     func postUnloadTomato()
     {
-        
+        for info in memory.allInfo()
+        {
+            if info.isTomato, let pile = info.info as? GKAgent
+            {                
+                behavior = MoveToPile(tomatoPile: pile)
+                state = .ReturningToPile
+                return
+            }
+        }
     }
     
     override func update(deltaTime seconds: TimeInterval) {

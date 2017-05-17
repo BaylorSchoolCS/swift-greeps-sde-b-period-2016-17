@@ -15,6 +15,8 @@ class GameViewController: UIViewController {
     var sceneCounter = 0
     let mapDataLocation = Bundle.main.url(forResource: "example", withExtension: "json")
     var maps:[[String:Any]]?
+    let sceneLength = 20000 // in ms
+    var totalScoreCounter = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +34,8 @@ class GameViewController: UIViewController {
         
         for i in 0..<10
         {
-            GameViewController.delayQueue.asyncAfter(deadline: .now() + .milliseconds(10000*i)) {
+            GameViewController.delayQueue.asyncAfter(deadline: .now() + .milliseconds(sceneLength * i) ){
+                self.updateTotalScore()
                 self.loadCurrentScene()
                 self.sceneCounter += 1
             }
@@ -47,6 +50,7 @@ class GameViewController: UIViewController {
             let sceneJSON = maps?[sceneCounter],
             let sceneNode = scene.rootNode as! GameScene?
         {
+            sceneNode.gvc = self
             // Copy gameplay related content over to the scene
             sceneNode.entities = scene.entities
             sceneNode.graphs = scene.graphs
@@ -86,7 +90,14 @@ class GameViewController: UIViewController {
             }
         }
     }
-    
+    func updateTotalScore()
+    {
+        if let view = self.view as! SKView?, let scene = view.scene as! GameScene?
+        {
+            totalScoreCounter += scene.count
+            print( "\(scene.count) added. New total: \(totalScoreCounter)" )
+        }
+    }
     override var shouldAutorotate: Bool {
         return true
     }

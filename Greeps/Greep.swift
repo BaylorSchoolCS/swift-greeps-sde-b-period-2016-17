@@ -91,7 +91,8 @@ class Greep: GKEntity
         spriteComponent.node.entity = self
         
         let sprite = spriteComponent.node as! SKSpriteNode
-        let physics = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
+        let physics = SKPhysicsBody(circleOfRadius: sprite.size.width/2)
+        //let physics = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
         physics.categoryBitMask = PhysicsCategory.greep.rawValue
         physics.collisionBitMask = PhysicsCategory.water.rawValue | PhysicsCategory.boundary.rawValue
         physics.contactTestBitMask = ( (PhysicsCategory.tomato.rawValue | PhysicsCategory.water.rawValue) | (PhysicsCategory.ship.rawValue | PhysicsCategory.greep.rawValue) ) | PhysicsCategory.boundary.rawValue
@@ -125,24 +126,43 @@ class Greep: GKEntity
         mover.rotation += delta
     }
     
+    private func updateSprite()
+    {
+        let newSprite = isCarryingTomato ? SKSpriteNode(imageNamed: "greep_green_tomato.png") : SKSpriteNode(imageNamed: "greep_green.png")
+        newSprite.setScale(0.05)
+        newSprite.entity = self
+        let physics = sprite.physicsBody
+        newSprite.physicsBody = physics
+        newSprite.position = sprite.position
+        
+        let scene = sprite.parent
+        sprite.removeFromParent()
+        
+        sprite = newSprite
+        scene?.addChild(sprite)
+        
+    }
+    
     func loadTomatoFromPile( _ pile: TomatoPile )
     {
-        
+        if !isCarryingTomato && pile.removeTomato()
+        {
+            isCarryingTomato = true
+            updateSprite()
+        }
     }
     
     func unloadTomatoPile( )
     {
-        if( isCarryingTomato )
+        if isCarryingTomato
         {
             isCarryingTomato = false
             ship.addTomato()
+            //print ("I attempted to add a tomato")
             speed = 0
             state = .Waiting
             behavior = WaitGreepBehavior()
-            let newSprite = SKSpriteNode(imageNamed: "greep_green.png")
-            newSprite.setScale(0.05)
-            sprite = newSprite
-            sprite.entity = self
+            updateSprite()
             postUnloadTomato()
         }
     }
@@ -163,7 +183,22 @@ class Greep: GKEntity
     func storeTomatoLocationAbout( _ pile: TomatoPile, overwriteObstacle: Bool, overwriteOtherTomatoPile: Bool )
     {
         guard let info = Information(info: pile) else { fatalError("invalid information") }
-        if memory.hasEmptySlot()
+        
+        if memory.contains( information: info )
+        {
+            for i in 0...2
+            {
+                if let infoInSlot = memory.infoInSlot(i)
+                {
+                    if infoInSlot.lastKnownCount != info.lastKnownCount
+                    {
+                        memory.add(information: info, toSlot: i)
+                        return
+                    }
+                }
+            }
+        }
+        else if memory.hasEmptySlot()
         {
             memory.add( information: info )
         }
@@ -222,18 +257,20 @@ class Greep: GKEntity
     
     func shareInformationWith( _ otherGreep: Greep, postState: State? = nil, postBehavior: GKBehavior? = nil)
     {
-        let (previousState, previousBehavior) = willShareInformation()
-        let (otherGreepPreviousState, otherGreepPreviousBehavior) = otherGreep.willShareInformation()
-        GameViewController.delayQueue.asyncAfter(deadline: .now() + Greep.shareInformationTime) {
-            self.state = postState == nil ? previousState : postState!
-            self.behavior = postBehavior == nil ? previousBehavior : postBehavior!
-            self.exchangeInformationWith( otherGreep )
-            self.speed = (self.state == .AtWater || self.state == .AtEdge ) ? 0 : Greep.defaultSpeed  
-            otherGreep.state = otherGreepPreviousState
-            otherGreep.speed = (otherGreep.state == .AtWater || otherGreep.state == .AtEdge ) ? 0 : Greep.defaultSpeed
-            otherGreep.behavior = otherGreepPreviousBehavior
-            otherGreep.postSharedWith()
-        }
-        
+        if state != .SharingInformation
+        {
+            let (previousState, previousBehavior) = willShareInformation()
+            let (otherGreepPreviousState, otherGreepPreviousBehavior) = otherGreep.willShareInformation()
+            GameViewController.delayQueue.asyncAfter(deadline: .now() + Greep.shareInformationTime) {
+                self.state = postState == nil ? previousState : postState!
+                self.behavior = postBehavior == nil ? previousBehavior : postBehavior!
+                self.exchangeInformationWith( otherGreep )
+                self.speed = (self.state == .AtWater || self.state == .AtEdge ) ? 0 : Greep.defaultSpeed  
+                otherGreep.state = otherGreepPreviousState
+                otherGreep.speed = (otherGreep.state == .AtWater || otherGreep.state == .AtEdge ) ? 0 : Greep.defaultSpeed
+                otherGreep.behavior = otherGreepPreviousBehavior
+                otherGreep.postSharedWith()
+            }
+        }        
     }
 }
