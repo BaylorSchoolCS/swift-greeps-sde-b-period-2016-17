@@ -50,6 +50,7 @@ class GameViewController: UIViewController {
             let sceneJSON = maps?[sceneCounter],
             let sceneNode = scene.rootNode as! GameScene?
         {
+            sceneNode.gvc = self
             // Copy gameplay related content over to the scene
             sceneNode.entities = scene.entities
             sceneNode.graphs = scene.graphs
