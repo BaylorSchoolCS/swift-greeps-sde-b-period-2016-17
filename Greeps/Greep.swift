@@ -11,6 +11,42 @@ import GameplayKit
 
 class Greep: GKEntity
 {
+    enum Direction
+    {
+        case NE, N, NW, W, SW, S, SE, E
+        
+        func agentForDirection() -> GKAgent2D
+        {
+            let agent = GKAgent2D()
+            switch self {
+                case .NE: agent.position = vector2( 0, 768 )
+                case .N: agent.position = vector2(512, 768)
+                case .NW: agent.position = vector2(1024, 768)
+                case .W: agent.position = vector2(1024, 384)
+                case .SW: agent.position = vector2(1024, 0)
+                case .S: agent.position = vector2(512, 0)
+                case .SE: agent.position = vector2(0, 0)
+                case .E: agent.position = vector2(0, 384)
+            }
+            return agent
+        }
+        
+        static func randomDirectionAgent() -> GKAgent2D
+        {
+            switch arc4random_uniform(8) {
+                case 0: return Direction.NE.agentForDirection()
+                case 1: return Direction.N.agentForDirection()
+                case 2: return Direction.NW.agentForDirection()
+                case 3: return Direction.W.agentForDirection()
+                case 4: return Direction.SW.agentForDirection()
+                case 5: return Direction.S.agentForDirection()
+                case 6: return Direction.SE.agentForDirection()
+                case 7: return Direction.E.agentForDirection()
+                default: fatalError("incorrect direction")
+            }
+        }
+    }
+    
     let ship: Ship
 
     static let defaultSpeed:Float = 80.0
@@ -91,7 +127,7 @@ class Greep: GKEntity
         spriteComponent.node.entity = self
         
         let sprite = spriteComponent.node as! SKSpriteNode
-        let physics = SKPhysicsBody(circleOfRadius: sprite.size.width/2)
+        let physics = SKPhysicsBody(circleOfRadius: sprite.size.width/3)
         //let physics = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
         physics.categoryBitMask = PhysicsCategory.greep.rawValue
         physics.collisionBitMask = PhysicsCategory.water.rawValue | PhysicsCategory.boundary.rawValue

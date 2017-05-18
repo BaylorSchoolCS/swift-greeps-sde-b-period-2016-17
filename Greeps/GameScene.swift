@@ -24,7 +24,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var lastUpdateTime : TimeInterval = 0
     
     private var lastGreepAddTime: TimeInterval = 0
-    let greepDelayInterval: TimeInterval = 0.5
+    let greepDelayInterval: TimeInterval = 0.67
     
     override func didMove(to view: SKView) {
         self.lastUpdateTime = 0
