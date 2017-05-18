@@ -26,7 +26,7 @@ class MoveComponent: GKAgent2D
         speed = Greep.defaultSpeed
         maxSpeed = Greep.defaultSpeed
         maxAcceleration = Greep.defaultSpeed
-//        rotation = Float(Int(arc4random() % 360)) - 180.0
+        rotation = Float(Int(arc4random() % 360)) - 180.0
         radius = 10 //?
         mass = 1
     }

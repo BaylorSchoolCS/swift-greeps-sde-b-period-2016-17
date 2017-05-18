@@ -23,6 +23,20 @@ class DefaultGreepBahavior: GKBehavior
     }
 }
 
+class MoveToRandomCornerGreepBehavior: GKBehavior
+{
+    override init() {
+        super.init()
+        setWeight(1.0, for: GKGoal(toWander: Greep.wanderAmount))
+        setWeight(1.0, for: GKGoal(toSeekAgent: Greep.Direction.randomDirectionAgent()))
+    }
+    
+    override var description: String
+    {
+        return "random corner"
+    }
+}
+
 class WaitGreepBehavior: GKBehavior
 {
     override init() {
