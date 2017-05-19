@@ -39,7 +39,8 @@ class Ship: GKEntity
         let texture = SKTexture(imageNamed: "ship.png")
         let spriteComponent = SpriteComponent(texture: texture)
         spriteComponent.node.entity = self
-        let physics = SKPhysicsBody(texture: texture, size: texture.size())
+        let physics = SKPhysicsBody(circleOfRadius: texture.size().width/5)
+//        let physics = SKPhysicsBody(texture: texture, size: texture.size())
         physics.categoryBitMask = PhysicsCategory.ship.rawValue
         physics.affectedByGravity = false
         physics.isDynamic = false
