@@ -128,6 +128,7 @@ class Greep: GKEntity
         spriteComponent.node.entity = self
         
         let sprite = spriteComponent.node as! SKSpriteNode
+        sprite.zPosition = 1.0
         let physics = SKPhysicsBody(circleOfRadius: sprite.size.width/3)
         //let physics = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
         physics.categoryBitMask = PhysicsCategory.greep.rawValue
