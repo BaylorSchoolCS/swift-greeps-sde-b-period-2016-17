@@ -226,15 +226,15 @@
              "shipX": 300,
              "shipY": 600,
              "obstacles": [{
-                           "x": 800,
+                           "x": 200,
                            "y": 200,
-                           "scale": 2,
+                           "scale": 4,
                            "rotation": 0,
                            "type": 19
                            },
                            {
-                           "x": 800,
-                           "y": 200,
+                           "x": 600,
+                           "y": 400,
                            "scale": 2,
                            "rotation": 0,
                            "type": 20
@@ -248,26 +248,20 @@
                            }
                            ],
              "tomatoes": [{
-                          "x": 900,
-                          "y": 100,
+                          "x": 300,
+                          "y": 500,
+                          "count": 16
+                          },
+                          {
+                          "x": 600,
+                          "y": 600,
                           "count": 16
                           },
                           {
                           "x": 800,
-                          "y": 200,
+                          "y": 400,
                           "count": 16
-                          },
-                          {
-                          "x": 800,
-                          "y": 200,
-                          "count": 16
-                          },
-                          {
-                          "x": 800,
-                          "y": 200,
-                          "count": 16
-                          }
-                          
+                          }                          
                           ]
              },
              {
@@ -275,95 +269,11 @@
              "shipX": 300,
              "shipY": 1600,
              "obstacles": [{
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160,
-                           "type": 1
-                           },
-                           {
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160,
-                           "type": 1
-                           },
-                           {
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160,
-                           "type": 1
-                           },
-                           {
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160,
-                           "type": 1
-                           },
-                           {
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160,
-                           "type": 1
-                           },
-                           {
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160,
-                           "type": 1
-                           },
-                           {
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160,
-                           "type": 1
-                           },
-                           {
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160,
-                           "type": 1
-                           },
-                           {
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160,
-                           "type": 1
-                           },
-                           {
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160,
-                           "type": 1
-                           },
-                           {
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160,
-                           "type": 1
-                           },
-                           {
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160,
-                           "type": 1
-                           },
-                           {
-                           "x": 800,
-                           "y": 200,
-                           "scale": 0.2,
-                           "rotation": 160,
-                           "type": 1
+                           "x": 50,
+                           "y": 400,
+                           "scale": 1.5,
+                           "rotation": 0,
+                           "type": 22
                            }
                            ],
              "tomatoes": [{
