@@ -2,8 +2,9 @@
 //  GreepBehaviors.swift
 //  Greeps
 //
-//  Created by Jason Oswald on 4/3/17.
-//  Copyright © 2017 CS. All rights reserved.
+//  Created by the 2016-17 Software Design and Engineering class at Baylor School.
+//  Jackson Bush, Charlie Collins, Jason Green, Cam King, Ben Workinger
+//  Copyright © 2017 Baylor School Computer Science. All rights reserved.
 //
 
 import Foundation
@@ -19,6 +20,20 @@ class DefaultGreepBahavior: GKBehavior
     override var description: String
     {
         return "default"
+    }
+}
+
+class MoveToRandomCornerGreepBehavior: GKBehavior
+{
+    override init() {
+        super.init()
+        setWeight(1.0, for: GKGoal(toWander: Greep.wanderAmount))
+        setWeight(1.0, for: GKGoal(toSeekAgent: Greep.Direction.randomDirectionAgent()))
+    }
+    
+    override var description: String
+    {
+        return "random corner"
     }
 }
 
