@@ -109,6 +109,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.fontColor = SKColor.white
         scoreLabel.text = "Level Score: " + " \(count)"
         scoreLabel.position = CGPoint(x:frame.size.width / 8, y:frame.size.height - frame.size.height / 14)
+        scoreLabel.zPosition = 10.0
         self.addChild(scoreLabel)
         totalScoreLabel = SKLabelNode(fontNamed: "Papyrus")
         totalScoreLabel.name = totalScoreLabelName
@@ -116,6 +117,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         totalScoreLabel.fontColor = SKColor.white
         totalScoreLabel.text = "Total Score: " + "\(String(describing: gvc!.totalScoreCounter))"
         totalScoreLabel.position = CGPoint(x:frame.size.width / 8, y:frame.size.height - frame.size.height / 7)
+        totalScoreLabel.zPosition = 10.0
         self.addChild(totalScoreLabel)
     }
     

@@ -96,7 +96,7 @@ class GameViewController: UIViewController {
         if let view = self.view as! SKView?, let scene = view.scene as! GameScene?
         {
             totalScoreCounter += scene.count
-            print( "\(scene.count) added. New total: \(totalScoreCounter)" )
+//            print( "\(scene.count) added. New total: \(totalScoreCounter)" )
         }
     }
     override var shouldAutorotate: Bool {
