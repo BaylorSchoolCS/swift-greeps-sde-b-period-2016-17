@@ -137,7 +137,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         {
             addChild(water)
         }
-        let texture = SKTexture(imageNamed: "\(fileName).png")
+        let texture = SKTexture(imageNamed: "\(fileName)")
         let sprite = SKSpriteNode(texture: texture)
         sprite.setScale(CGFloat(scale))
         sprite.zRotation = CGFloat(rotation)

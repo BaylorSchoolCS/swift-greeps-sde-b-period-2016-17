@@ -36,7 +36,7 @@ class Ship: GKEntity
     {
         self.scene = scene
         super.init()
-        let texture = SKTexture(imageNamed: "ship.png")
+        let texture = SKTexture(imageNamed: "ship")
         let spriteComponent = SpriteComponent(texture: texture)
         spriteComponent.node.entity = self
         let physics = SKPhysicsBody(circleOfRadius: texture.size().width/5)

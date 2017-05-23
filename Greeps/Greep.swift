@@ -138,7 +138,7 @@ class Greep: GKEntity
         super.init()
         
         let shipPosition = ship.getPosition()
-        let spriteComponent = GKSKNodeComponent(node: SKSpriteNode(imageNamed: "greep_green.png"))
+        let spriteComponent = GKSKNodeComponent(node: SKSpriteNode(imageNamed: "greep_green"))
         spriteComponent.node.setScale(0.05)
         spriteComponent.node.entity = self
         
@@ -181,7 +181,7 @@ class Greep: GKEntity
     
     private func updateSprite()
     {
-        let newSprite = isCarryingTomato ? SKSpriteNode(imageNamed: "greep_green_tomato.png") : SKSpriteNode(imageNamed: "greep_green.png")
+        let newSprite = isCarryingTomato ? SKSpriteNode(imageNamed: "greep_green_tomato") : SKSpriteNode(imageNamed: "greep_green")
         newSprite.setScale(0.05)
         newSprite.entity = self
         let physics = sprite.physicsBody
