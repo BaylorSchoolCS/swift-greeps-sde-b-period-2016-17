@@ -16,7 +16,7 @@ class GameViewController: UIViewController {
     var sceneCounter = 0
     let mapDataLocation = Bundle.main.url(forResource: "example", withExtension: "json")
     var maps:[[String:Any]]?
-    let sceneLength = 20000 // in ms
+    let sceneLength = 45000 // in ms
     var totalScoreCounter = 0
     
     override func viewDidLoad() {

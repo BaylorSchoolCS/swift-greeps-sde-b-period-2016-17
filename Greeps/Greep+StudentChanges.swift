@@ -27,18 +27,29 @@ extension Greep
     // This function gets called when this greep comes in contact with the edge
     func contactedEdge()
     {
-        perform(behavior: ReturnHomeGreepBehavior(ship: ship), forMilliseconds: 2000, withState: .AvoidingObstacle, postState: .Searching, postBehavior: DefaultGreepBahavior())
+        perform(behavior: ReturnHomeGreepBehavior(ship: ship), forMilliseconds: 2000, withState: .AvoidingObstacle, postState: .Searching, postBehavior: DefaultGreepBehavior())
     }
     
     // This function gets called when this greep comes in contact with the water
     func contactedWater(_ water: GKPolygonObstacle)
     {
 //         add obstacle to memory
-        if !memory.contains( information: Information(info: water)!) && (memory.infoInSlot(0) == nil || memory.infoInSlot(1) == nil)
+//        if !memory.contains( information: Information(info: water)!) && (memory.infoInSlot(0) == nil || memory.infoInSlot(1) == nil)
+//        {
+//            gatherInformationAbout(obstacle: water, postState: .ReturningHome, postBehavior: ReturnHomeGreepBehavior(ship: ship) )
+//        }
+        if isCarryingTomato
         {
-            gatherInformationAbout(obstacle: water, postState: .ReturningHome, postBehavior: ReturnHomeGreepBehavior(ship: ship) )
+            perform(behavior: MoveToRandomDirectionGreepBehavior(), forMilliseconds: 1000, withState: .AvoidingObstacle, postState: .ReturningHome, postBehavior: ReturnHomeGreepBehavior(ship: ship) )
         }
-        
+//        else if direction != nil
+//        {
+//            perform(behavior: MoveToDirectionGreepBehavior(direction: (direction!.oppositeDirection())), forMilliseconds: 1000, withState: .AvoidingObstacle, postState: state, postBehavior: MoveToDirectionGreepBehavior(direction: direction!))
+//        }
+        else
+        {
+            perform(behavior: MoveToRandomDirectionGreepBehavior(), forMilliseconds: 3000, withState: .AvoidingObstacle, postState: .ReturningHome, postBehavior: DefaultGreepBehavior() )
+        }
         
     }
     
@@ -66,7 +77,7 @@ extension Greep
     // This function gets called when this greep comes in contact with another greep
     func contactedGreep( _ otherGreep: Greep )
     {
-        shareInformationWith(otherGreep, postState: .Searching, postBehavior: DefaultGreepBahavior())
+        shareInformationWith(otherGreep, postState: .Searching, postBehavior: DefaultGreepBehavior())
 //        print( "I, \(sprite?.physicsBody?.node?.name), contacted \(otherGreep.sprite?.physicsBody?.node?.name)")
 //        rotate(delta: 50)
     }

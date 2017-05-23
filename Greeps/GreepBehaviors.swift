@@ -10,7 +10,7 @@
 import Foundation
 import GameplayKit
 
-class DefaultGreepBahavior: GKBehavior
+class DefaultGreepBehavior: GKBehavior
 {
     override init() {
         super.init()
@@ -23,12 +23,22 @@ class DefaultGreepBahavior: GKBehavior
     }
 }
 
-class MoveToRandomCornerGreepBehavior: GKBehavior
+class MoveToDirectionGreepBehavior: GKBehavior
+{
+    init( direction: Greep.Direction )
+    {
+        super.init()
+        setWeight(1.0, for: GKGoal(toWander: Greep.wanderAmount ))
+        setWeight(3.0, for: GKGoal(toSeekAgent: direction.agentForDirection()))
+    }
+}
+
+class MoveToRandomDirectionGreepBehavior: GKBehavior
 {
     override init() {
         super.init()
         setWeight(1.0, for: GKGoal(toWander: Greep.wanderAmount))
-        setWeight(1.0, for: GKGoal(toSeekAgent: Greep.Direction.randomDirectionAgent()))
+        setWeight(3.0, for: GKGoal(toSeekAgent: Greep.Direction.randomDirectionAgent()))
     }
     
     override var description: String

@@ -32,6 +32,20 @@ class Greep: GKEntity
             return agent
         }
         
+        func oppositeDirection() -> Direction
+        {
+            switch self {
+                case .NE: return .SW
+                case .N: return .S
+                case .NW: return .SE
+                case .W: return .E
+                case .SW: return .NE
+                case .S: return .N
+                case .SE: return .NW
+                case .E: return .W
+            }
+        }
+        
         static func randomDirectionAgent() -> GKAgent2D
         {
             switch arc4random_uniform(8) {
@@ -58,6 +72,7 @@ class Greep: GKEntity
     var state: State = .Searching
     var memory = Memory()
     var number: UInt8 = 0
+    var direction: Direction?
     
     var isCarryingTomato = false
     
@@ -151,18 +166,18 @@ class Greep: GKEntity
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setRotation( newRotation: Float )
-    {
-        guard let mover = component(ofType: MoveComponent.self) else { return }
-        mover.rotation = newRotation
-    }
-    
-    
-    func rotate( delta: Float )
-    {
-        guard let mover = component(ofType: MoveComponent.self) else { return }
-        mover.rotation += delta
-    }
+//    func setRotation( newRotation: Float )
+//    {
+//        guard let mover = component(ofType: MoveComponent.self) else { return }
+//        mover.rotation = newRotation
+//    }
+//    
+//    
+//    func rotate( delta: Float )
+//    {
+//        guard let mover = component(ofType: MoveComponent.self) else { return }
+//        mover.rotation += delta
+//    }
     
     private func updateSprite()
     {
